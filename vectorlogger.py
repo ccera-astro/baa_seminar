@@ -1,0 +1,88 @@
+"""
+Embedded Python Blocks:
+
+Each time this file is saved, GRC will instantiate the first class it finds
+to get ports and parameters of your block. The arguments to __init__  will
+be the parameters. All of them are required to have default values!
+"""
+
+import numpy as np
+from gnuradio import gr
+import time
+
+
+class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
+    """Logging of vectors (like FFT outputs)"""
+
+    def __init__(self, fftsize=2048, formatter=None, filepat="foonly-%04d%02d%02d", extension=".csv", logtime=10, fmtstr="%11.9f", localtime=False):  # only default arguments here
+        """arguments to this function show up as parameters in GRC"""
+        gr.sync_block.__init__(
+            self,
+            name='BAA:Vector Logger',   # will show up in GRC
+            in_sig=[(np.float32,fftsize)],
+            out_sig=None
+        )
+        
+        self.formatter = formatter
+        self.filepat = filepat
+        self.extension = extension
+        self.logtime = logtime
+        self.fmtstr = fmtstr
+        self.localtime = localtime
+        self.vecavg = np.zeros(fftsize)
+        self.now = time.time()
+
+        
+
+    def work(self, input_items, output_items):
+        """Log a vector into a filet"""
+        for x in range(len(input_items[0])):
+            self.vecavg = np.add(self.vecavg, input_items[0][x])
+            self.vecavg = np.divide(self.vecavg, [2.0]*len(self.vecavg))
+        
+        #
+        # If time to log
+        #
+        if (time.time() - self.now >= self.logtime):
+            self.now = time.time()
+            #
+            # Decide on localtime or gmtime
+            #
+            if (self.localtime == True):
+                ltp = time.localtime()
+            else:
+                ltp = time.gmtime()
+            
+            #
+            # If they specified a formatter function call it instead
+            #
+            if (self.formatter != None):
+                self.formatter(self.vecavg,self.filepat,self.extension)
+            
+            #
+            # Otherwise, do it here
+            #
+            else:
+				#
+				# Open the output file, with a name according to the filepat
+				#  specified
+				#
+                fp = open(self.filepat % (ltp.tm_year, ltp.tm_mon, ltp.tm_mday) + self.extension, "a")
+                
+                #
+                # Write record header
+                #
+                fp.write ("%02d,%02d,%02d," % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))
+                
+                #
+                # Write each of the data items in the input vector
+                #
+                for x in range(len(self.vecavg)):
+                    fp.write(self.fmtstr % self.vecavg[x])
+                    if (x < len(self.vecavg)-1):
+                        fp.write(",")
+                fp.write("\n")
+                fp.close()
+            
+            
+        return len(input_items[0])
