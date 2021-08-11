@@ -14,7 +14,8 @@ import time
 class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
     """Logging of vectors (like FFT outputs)"""
 
-    def __init__(self, fftsize=2048, formatter=None, filepat="foonly-%04d%02d%02d", extension=".csv", logtime=10, fmtstr="%11.9f", localtime=False):  # only default arguments here
+    def __init__(self, fftsize=2048, formatter=None, filepat="foonly-%04d%02d%02d", extension=".csv",
+        logtime=10, fmtstr="%11.9f", localtime=False, fftshift=True):  # only default arguments here
         """arguments to this function show up as parameters in GRC"""
         gr.sync_block.__init__(
             self,
@@ -31,6 +32,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         self.localtime = localtime
         self.vecavg = np.zeros(fftsize)
         self.now = time.time()
+        self.fftshift = fftshift
 
         
 
@@ -63,10 +65,10 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
             # Otherwise, do it here
             #
             else:
-				#
-				# Open the output file, with a name according to the filepat
-				#  specified
-				#
+                #
+                # Open the output file, with a name according to the filepat
+                #  specified
+                #
                 fp = open(self.filepat % (ltp.tm_year, ltp.tm_mon, ltp.tm_mday) + self.extension, "a")
                 
                 #
@@ -77,8 +79,21 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                 #
                 # Write each of the data items in the input vector
                 #
+                
+                #
+                # Check if they want us to  do an FFTSHIFT operation
+                #  (to  normalize the ordering of FFTW3 outputs)
+                #
+                if (self.fftshift == True):
+                    l = len(self.vecavg)
+                    l1 = list(self.vecavg[int(l/2):])
+                    l2 = list(self.vecavg[0:int(l/2)])
+                    lout = l1 + l2
+                    lout = np.array(lout)
+                else:
+                    lout = self.vecavg
                 for x in range(len(self.vecavg)):
-                    fp.write(self.fmtstr % self.vecavg[x])
+                    fp.write(self.fmtstr % lout[x])
                     if (x < len(self.vecavg)-1):
                         fp.write(",")
                 fp.write("\n")
