@@ -9,13 +9,13 @@ be the parameters. All of them are required to have default values!
 import numpy as np
 from gnuradio import gr
 import time
-
+import ra_funcs
 
 class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
     """Logging of vectors (like FFT outputs)"""
 
     def __init__(self, fftsize=2048, formatter=None, filepat="foonly-%04d%02d%02d", extension=".csv",
-        logtime=10, fmtstr="%11.9f", localtime=False, fftshift=True):  # only default arguments here
+        logtime=10, fmtstr="%11.9f", localtime=False, fftshift=True,longitude=-76.03):  # only default arguments here
         """arguments to this function show up as parameters in GRC"""
         gr.sync_block.__init__(
             self,
@@ -33,6 +33,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         self.vecavg = np.zeros(fftsize)
         self.now = time.time()
         self.fftshift = fftshift
+        self.longitude = longitude
 
         
 
@@ -75,6 +76,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                 # Write record header
                 #
                 fp.write ("%02d,%02d,%02d," % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))
+                fp.write ("%s" % ra_funcs.cur_sidereal(self.longitude))
                 
                 #
                 # Write each of the data items in the input vector
