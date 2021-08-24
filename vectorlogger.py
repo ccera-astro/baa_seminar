@@ -38,7 +38,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         
 
     def work(self, input_items, output_items):
-        """Log a vector into a filet"""
+        """Log a vector into a file"""
         for x in range(len(input_items[0])):
             self.vecavg = np.add(self.vecavg, input_items[0][x])
             self.vecavg = np.divide(self.vecavg, [2.0]*len(self.vecavg))
