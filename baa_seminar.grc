@@ -143,6 +143,55 @@ blocks:
     coordinate: [16, 580.0]
     rotation: 0
     state: enabled
+- name: baseline_compare
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\n\n\nclass blk(gr.sync_block):  # other base classes\
+      \ are basic_block, decim_block, interp_block\n    \"\"\"Baseline compensator\
+      \ block\n         Takes in an integrated FFT vector and either outputs that\
+      \ vector, or\n         outputs a baseline-subtracted version of that vector\n\
+      \    \"\"\"\n\n    def __init__(self, fftsize=2048,collect=True):  # only default\
+      \ arguments here\n        \"\"\"arguments to this function show up as parameters\
+      \ in GRC\"\"\"\n        gr.sync_block.__init__(\n            self,\n       \
+      \     name='Baseline Compensator',   # will show up in GRC\n            in_sig=[(np.float32,fftsize)],\n\
+      \            out_sig=[(np.float32,fftsize)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        self.collect = collect\n        self.fftbuf\
+      \ = np.zeros(fftsize,dtype=np.float32)\n\n    def work(self, input_items, output_items):\n\
+      \        \"\"\"Accumulate baseline data, apply corrections when asked\"\"\"\n\
+      \        if (self.collect == True):\n            #\n            # Collect samples,\
+      \ and compute a moving average on them\n            # They're already fairly-well\
+      \ smoothed, so we don't\n            # need to go overboard\n            #\n\
+      \            for x in range(len(input_items[0])):\n                self.fftbuf\
+      \ = np.add(self.fftbuf, input_items[0][x])\n                self.fftbuf = np.divide(self.fftbuf,\
+      \ [2.0]*len(self.fftbuf))\n            self.avg = sum(self.fftbuf)/len(self.fftbuf)\n\
+      \            self.avg *= 1.5\n            \n            for x in range(len(output_items[0])):\n\
+      \                output_items[0][x] = input_items[0][x]\n        else:\n   \
+      \         for x in range(len(output_items[0])):\n                output_items[0][x]\
+      \ = np.subtract(input_items[0][x], self.fftbuf)\n                output_items[0][x]\
+      \ = np.add(output_items[0][x], self.avg)\n        \n        return len(output_items[0])\n"
+    affinity: ''
+    alias: ''
+    collect: True if correct_baseline == False else False
+    comment: ''
+    fftsize: '2048'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Baseline Compensator', 'blk', [('fftsize', '2048'), ('collect', 'True')],
+      [('0', 'float', 2048)], [('0', 'float', 2048)], 'Baseline compensator block\n         Takes
+      in an integrated FFT vector and either outputs that vector, or\n         outputs
+      a baseline-subtracted version of that vector\n    ', ['collect'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1176, 916.0]
+    rotation: 0
+    state: true
 - name: blocks_complex_to_mag_squared_0
   id: blocks_complex_to_mag_squared
   parameters:
@@ -307,55 +356,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [600, 684.0]
-    rotation: 0
-    state: true
-- name: epy_block_0
-  id: epy_block
-  parameters:
-    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
-      \ GRC will instantiate the first class it finds\nto get ports and parameters\
-      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
-      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
-      from gnuradio import gr\n\n\nclass blk(gr.sync_block):  # other base classes\
-      \ are basic_block, decim_block, interp_block\n    \"\"\"Baseline compensator\
-      \ block\n         Takes in an integrated FFT vector and either outputs that\
-      \ vector, or\n         outputs a baseline-subtracted version of that vector\n\
-      \    \"\"\"\n\n    def __init__(self, fftsize=2048,collect=True):  # only default\
-      \ arguments here\n        \"\"\"arguments to this function show up as parameters\
-      \ in GRC\"\"\"\n        gr.sync_block.__init__(\n            self,\n       \
-      \     name='Baseline Compensator',   # will show up in GRC\n            in_sig=[(np.float32,fftsize)],\n\
-      \            out_sig=[(np.float32,fftsize)]\n        )\n        # if an attribute\
-      \ with the same name as a parameter is found,\n        # a callback is registered\
-      \ (properties work, too).\n        self.collect = collect\n        self.fftbuf\
-      \ = np.zeros(fftsize,dtype=np.float32)\n\n    def work(self, input_items, output_items):\n\
-      \        \"\"\"Accumulate baseline data, apply corrections when asked\"\"\"\n\
-      \        if (self.collect == True):\n            #\n            # Collect samples,\
-      \ and compute a moving average on them\n            # They're already fairly-well\
-      \ smoothed, so we don't\n            # need to go overboard\n            #\n\
-      \            for x in range(len(input_items[0])):\n                self.fftbuf\
-      \ = np.add(self.fftbuf, input_items[0][x])\n                self.fftbuf = np.divide(self.fftbuf,\
-      \ [2.0]*len(self.fftbuf))\n            self.avg = sum(self.fftbuf)/len(self.fftbuf)\n\
-      \            self.avg *= 1.5\n            \n            for x in range(len(output_items[0])):\n\
-      \                output_items[0][x] = input_items[0][x]\n        else:\n   \
-      \         for x in range(len(output_items[0])):\n                output_items[0][x]\
-      \ = np.subtract(input_items[0][x], self.fftbuf)\n                output_items[0][x]\
-      \ = np.add(output_items[0][x], self.avg)\n        \n        return len(output_items[0])\n"
-    affinity: ''
-    alias: ''
-    collect: True if correct_baseline == False else False
-    comment: ''
-    fftsize: '2048'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-  states:
-    _io_cache: ('Baseline Compensator', 'blk', [('fftsize', '2048'), ('collect', 'True')],
-      [('0', 'float', 2048)], [('0', 'float', 2048)], 'Baseline compensator block\n         Takes
-      in an integrated FFT vector and either outputs that vector, or\n         outputs
-      a baseline-subtracted version of that vector\n    ', ['collect'])
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1176, 916.0]
     rotation: 0
     state: true
 - name: fft_vxx_0
@@ -1427,13 +1427,13 @@ blocks:
     state: true
 
 connections:
+- [baseline_compare, '0', blocks_nlog10_ff_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', single_pole_iir_filter_xx_0, '0']
 - [blocks_complex_to_mag_squared_1, '0', single_pole_iir_filter_xx_1, '0']
 - [blocks_keep_one_in_n_0, '0', virtual_sink_2, '0']
-- [blocks_keep_one_in_n_1, '0', epy_block_0, '0']
+- [blocks_keep_one_in_n_1, '0', baseline_compare, '0']
 - [blocks_nlog10_ff_0, '0', virtual_sink_1, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
-- [epy_block_0, '0', blocks_nlog10_ff_0, '0']
 - [fft_vxx_0, '0', blocks_complex_to_mag_squared_1, '0']
 - [osmosdr_source_0, '0', virtual_sink_0, '0']
 - [osmosdr_source_0, '1', blocks_null_sink_1, '0']
