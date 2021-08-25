@@ -12,10 +12,20 @@ import time
 import ra_funcs
 
 class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
-    """Logging of vectors (like FFT outputs)"""
+    """Logging of vectors (like FFT outputs)
+          fftsize - size of fft vector to log
+          formetter - formatter function pointer
+          filepat - pattern for beginning of filenaem
+          extension - file extension
+          logtime - how often to log (seconds)
+          fmtstr - format string for data values
+          localtime - whether to use local or UTC time
+          fftshift - whether to shift FFT vector before logging
+          longitude  - local longitude in decimal form
+    """
 
     def __init__(self, fftsize=2048, formatter=None, filepat="foonly-%04d%02d%02d", extension=".csv",
-        logtime=10, fmtstr="%11.9f", localtime=False, fftshift=True,longitude=-76.03):  # only default arguments here
+        logtime=10, fmtstr="%11.9f", localtime=False, fftshift=False,longitude=-76.03):  # only default arguments here
         """arguments to this function show up as parameters in GRC"""
         gr.sync_block.__init__(
             self,

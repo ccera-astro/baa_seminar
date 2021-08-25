@@ -14,6 +14,9 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
     """Baseline compensator block
          Takes in an integrated FFT vector and either outputs that vector, or
          outputs a baseline-subtracted version of that vector
+         
+         fftsize - size of input vector
+         collect - operate in "collect" rather than compensate mode
     """
 
     def __init__(self, fftsize=2048,collect=True):  # only default arguments here

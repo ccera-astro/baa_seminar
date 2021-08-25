@@ -199,11 +199,12 @@ blocks:
       \ are basic_block, decim_block, interp_block\n    \"\"\"Baseline compensator\
       \ block\n         Takes in an integrated FFT vector and either outputs that\
       \ vector, or\n         outputs a baseline-subtracted version of that vector\n\
-      \    \"\"\"\n\n    def __init__(self, fftsize=2048,collect=True):  # only default\
-      \ arguments here\n        \"\"\"arguments to this function show up as parameters\
-      \ in GRC\"\"\"\n        gr.sync_block.__init__(\n            self,\n       \
-      \     name='BAA:Baseline Compensator',   # will show up in GRC\n           \
-      \ in_sig=[(np.float32,fftsize)],\n            out_sig=[(np.float32,fftsize)]\n\
+      \         \n         fftsize - size of input vector\n         collect - operate\
+      \ in \"collect\" rather than compensate mode\n    \"\"\"\n\n    def __init__(self,\
+      \ fftsize=2048,collect=True):  # only default arguments here\n        \"\"\"\
+      arguments to this function show up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n\
+      \            self,\n            name='BAA:Baseline Compensator',   # will show\
+      \ up in GRC\n            in_sig=[(np.float32,fftsize)],\n            out_sig=[(np.float32,fftsize)]\n\
       \        )\n        # if an attribute with the same name as a parameter is found,\n\
       \        # a callback is registered (properties work, too).\n        self.collect\
       \ = collect\n        self.fftbuf = np.zeros(fftsize,dtype=np.float32)\n\n  \
@@ -231,7 +232,9 @@ blocks:
     _io_cache: ('BAA:Baseline Compensator', 'blk', [('fftsize', '2048'), ('collect',
       'True')], [('0', 'float', 2048)], [('0', 'float', 2048)], 'Baseline compensator
       block\n         Takes in an integrated FFT vector and either outputs that vector,
-      or\n         outputs a baseline-subtracted version of that vector\n    ', ['collect'])
+      or\n         outputs a baseline-subtracted version of that vector\n         \n         fftsize
+      - size of input vector\n         collect - operate in "collect" rather than
+      compensate mode\n    ', ['collect'])
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -469,18 +472,21 @@ blocks:
       \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
       from gnuradio import gr\n\n\nclass blk(gr.sync_block):  # other base classes\
       \ are basic_block, decim_block, interp_block\n    \"\"\"Flipper -- simply reverse\
-      \ the order of a vector\"\"\"\n\n    def __init__(self, fftsize=2048,enabled=True):\
-      \  # only default arguments here\n        \"\"\"arguments to this function show\
-      \ up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n         \
-      \   self,\n            name='BAA:Flipper',   # will show up in GRC\n       \
-      \     in_sig=[(np.float32,fftsize)],\n            out_sig=[(np.float32,fftsize)]\n\
-      \        )\n        # if an attribute with the same name as a parameter is found,\n\
-      \        # a callback is registered (properties work, too).\n        self.enabled\
-      \ = enabled\n\n    def work(self, input_items, output_items):\n        \"\"\"\
-      Flip order\"\"\"\n        for x in range(len(output_items[0])):\n          \
-      \  if (self.enabled == True):\n                output_items[0][x] = input_items[0][x][::-1]\n\
-      \            else:\n                output_items[0][x] = input_items[0][x]\n\
-      \        return len(output_items[0])\n"
+      \ the order of a vector\n               fftsize - size of the (probably FFT)\
+      \ vector\n               enabled - whether to flip or not\n    \"\"\"\n\n  \
+      \  def __init__(self, fftsize=2048,enabled=True):  # only default arguments\
+      \ here\n        \"\"\"arguments to this function show up as parameters in GRC\"\
+      \"\"\n        gr.sync_block.__init__(\n            self,\n            name='BAA:Flipper',\
+      \   # will show up in GRC\n            in_sig=[(np.float32,fftsize)],\n    \
+      \        out_sig=[(np.float32,fftsize)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        self.enabled = enabled\n\n    def work(self,\
+      \ input_items, output_items):\n        \"\"\"Flip order\"\"\"\n        \n  \
+      \      #\n        # For each output item\n        #\n        # Either stuff\
+      \ it with flipped input, or non-flipped input\n        #\n        for x in range(len(output_items[0])):\n\
+      \            if (self.enabled == True):\n                output_items[0][x]\
+      \ = input_items[0][x][::-1]\n            else:\n                output_items[0][x]\
+      \ = input_items[0][x]\n        return len(output_items[0])\n"
     affinity: ''
     alias: ''
     comment: 'Optionally flip the spectral vector for
@@ -495,7 +501,8 @@ blocks:
   states:
     _io_cache: ('BAA:Flipper', 'blk', [('fftsize', '2048'), ('enabled', 'True')],
       [('0', 'float', 2048)], [('0', 'float', 2048)], 'Flipper -- simply reverse the
-      order of a vector', ['enabled'])
+      order of a vector\n               fftsize - size of the (probably FFT) vector\n               enabled
+      - whether to flip or not\n    ', ['enabled'])
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1343,34 +1350,40 @@ blocks:
       \ base classes are basic_block, decim_block, interp_block\n    \"\"\"A strip\
       \ chart takes in a stream of floats and produces a 1 hour long\n       strip-chart\
       \ as output\n       \n       Params:\n          decim - how much to decimate\
-      \ input to produce 1 SPS\"\"\"\n\n    def __init__(self, decim=100,seconds=3600):\
-      \  # only default arguments here\n        \"\"\"arguments to this function show\
-      \ up as parameters in GRC\"\"\"\n        gr.basic_block.__init__(\n        \
-      \    self,\n            name='BAA:Strip Chart',   # will show up in GRC\n  \
-      \          in_sig=[np.float32],\n            out_sig=[(np.float32,seconds)]\n\
-      \        )\n        # if an attribute with the same name as a parameter is found,\n\
-      \        # a callback is registered (properties work, too).\n        \n    \
-      \    #\n        # How much do we need to average the input to produce a 1SPS\n\
-      \        #  output?\n        #\n        self.decim = decim\n        \n     \
-      \   #\n        # The stripchart vector itself--must be persistent in the\n \
-      \       #  object instance\n        #\n        self.strip = [0.0]*seconds\n\
-      \        \n        #\n        # keeps track of decimation\n        #\n     \
-      \   self.counter = 0\n        \n        #\n        # We continuously average\
-      \ the input and store it here\n        #\n        self.avg = 0.0\n\n    def\
-      \ general_work(self, input_items, output_items):\n        \"\"\"take an input\
-      \ item(s), place appropriately in stripchart output\"\"\"\n        #\n     \
-      \   # For each of the input items\n        #\n        if (self.avg == 0.0):\n\
-      \            self.avg = input_items[0][0]\n            self.strip = [self.avg]*len(self.strip)\n\
-      \n        for x in range(len(input_items[0])):\n            #\n            #\
-      \ Two-point moving average for now\n            #\n            self.avg += input_items[0][x]\n\
-      \            self.counter += 1\n            \n            #\n            # Time\
-      \ to output an item into the stripchart\n            #\n            if (self.counter\
-      \ >= self.decim):\n                self.avg /= self.decim\n                \n\
-      \                #\n                # Use python array notation to effect a\
-      \ quick\n                #  shift of items in the stripchart array\n       \
-      \         #\n                self.strip = [self.avg] + self.strip[:-1]\n   \
-      \             self.counter = 0\n        #\n        # Stuff output items with\
-      \ the contents of the stripchart\n        #\n        for y in range(len(output_items[0])):\n\
+      \ input to produce 1 SPS\n          seconds - how many seconds long is the stripchart\
+      \ vector\n    \"\"\"\n\n    def __init__(self, decim=100,seconds=3600):  # only\
+      \ default arguments here\n        \"\"\"arguments to this function show up as\
+      \ parameters in GRC\"\"\"\n        gr.basic_block.__init__(\n            self,\n\
+      \            name='BAA:Strip Chart',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \            out_sig=[(np.float32,seconds)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        \n        #\n        # How much do we need\
+      \ to average the input to produce a 1SPS\n        #  output?\n        #\n  \
+      \      self.decim = decim\n        \n        #\n        # The stripchart vector\
+      \ itself--must be persistent in the\n        #  object instance\n        #\n\
+      \        self.strip = [0.0]*seconds\n        \n        #\n        # keeps track\
+      \ of decimation\n        #\n        self.counter = 0\n        \n        #\n\
+      \        # We continuously average the input and store it here\n        #\n\
+      \        self.avg = 0.0\n\n    def general_work(self, input_items, output_items):\n\
+      \        \"\"\"take an input item(s), place appropriately in stripchart output\"\
+      \"\"\n \n        #\n        # Our averager hasn't been initialized with a\n\
+      \        #  \"prime the pump\" value?\n        # Do it now.\n        #\n   \
+      \     if (self.avg == 0.0):\n            self.avg = input_items[0][0]\n    \
+      \        #\n            # Also init the strip-chart to this level\n        \
+      \    #\n            self.strip = [self.avg]*len(self.strip)\n        #\n   \
+      \     # For each of the input items\n        #\n        for x in range(len(input_items[0])):\n\
+      \            #\n            # Effectively we get a N-point moving average\n\
+      \            # WHere \"N\" is \"decim\"\n            #\n            self.avg\
+      \ += input_items[0][x]\n            self.counter += 1\n            \n      \
+      \      #\n            # Time to output an item into the stripchart\n       \
+      \     #\n            if (self.counter >= self.decim):\n                \n  \
+      \              #\n                # Reduce by decim\n                #\n   \
+      \             self.avg /= self.decim\n                \n                #\n\
+      \                # Use python array notation to effect a quick\n           \
+      \     #  shift of items in the stripchart array\n                #\n       \
+      \         self.strip = [self.avg] + self.strip[:-1]\n                self.counter\
+      \ = 0\n        #\n        # Stuff output items with the contents of the \n \
+      \       #  possibly-updated stripchart\n        #\n        for y in range(len(output_items[0])):\n\
       \            output_items[0][y] = self.strip\n        \n        #\n        #\
       \ Tell scheduler we consumed items\n        #\n        self.consume(0, len(input_items[0]))\n\
       \        return len(output_items[0])\n"
@@ -1385,7 +1398,8 @@ blocks:
     _io_cache: ('BAA:Strip Chart', 'blk', [('decim', '100'), ('seconds', '3600')],
       [('0', 'float', 1)], [('0', 'float', 3600)], 'A strip chart takes in a stream
       of floats and produces a 1 hour long\n       strip-chart as output\n       \n       Params:\n          decim
-      - how much to decimate input to produce 1 SPS', ['decim'])
+      - how much to decimate input to produce 1 SPS\n          seconds - how many
+      seconds long is the stripchart vector\n    ', ['decim'])
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1418,9 +1432,15 @@ blocks:
       \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
       from gnuradio import gr\nimport time\nimport ra_funcs\n\nclass blk(gr.sync_block):\
       \  # other base classes are basic_block, decim_block, interp_block\n    \"\"\
-      \"Logging of vectors (like FFT outputs)\"\"\"\n\n    def __init__(self, fftsize=2048,\
-      \ formatter=None, filepat=\"foonly-%04d%02d%02d\", extension=\".csv\",\n   \
-      \     logtime=10, fmtstr=\"%11.9f\", localtime=False, fftshift=True,longitude=-76.03):\
+      \"Logging of vectors (like FFT outputs)\n          fftsize - size of fft vector\
+      \ to log\n          formetter - formatter function pointer\n          filepat\
+      \ - pattern for beginning of filenaem\n          extension - file extension\n\
+      \          logtime - how often to log (seconds)\n          fmtstr - format string\
+      \ for data values\n          localtime - whether to use local or UTC time\n\
+      \          fftshift - whether to shift FFT vector before logging\n         \
+      \ longitude  - local longitude in decimal form\n    \"\"\"\n\n    def __init__(self,\
+      \ fftsize=2048, formatter=None, filepat=\"foonly-%04d%02d%02d\", extension=\"\
+      .csv\",\n        logtime=10, fmtstr=\"%11.9f\", localtime=False, fftshift=False,longitude=-76.03):\
       \  # only default arguments here\n        \"\"\"arguments to this function show\
       \ up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n         \
       \   self,\n            name='BAA:Vector Logger',   # will show up in GRC\n \
@@ -1465,7 +1485,7 @@ blocks:
     alias: ''
     comment: ''
     extension: '''.csv'''
-    fftshift: 'True'
+    fftshift: 'False'
     fftsize: fftsize
     filepat: '''fft-0-%04d%02d%02d'''
     fmtstr: '''%6.2f'''
@@ -1478,8 +1498,13 @@ blocks:
   states:
     _io_cache: ('BAA:Vector Logger', 'blk', [('fftsize', '2048'), ('formatter', 'None'),
       ('filepat', "'foonly-%04d%02d%02d'"), ('extension', "'.csv'"), ('logtime', '10'),
-      ('fmtstr', "'%11.9f'"), ('localtime', 'False'), ('fftshift', 'True'), ('longitude',
-      '-76.03')], [('0', 'float', 2048)], [], 'Logging of vectors (like FFT outputs)',
+      ('fmtstr', "'%11.9f'"), ('localtime', 'False'), ('fftshift', 'False'), ('longitude',
+      '-76.03')], [('0', 'float', 2048)], [], 'Logging of vectors (like FFT outputs)\n          fftsize
+      - size of fft vector to log\n          formetter - formatter function pointer\n          filepat
+      - pattern for beginning of filenaem\n          extension - file extension\n          logtime
+      - how often to log (seconds)\n          fmtstr - format string for data values\n          localtime
+      - whether to use local or UTC time\n          fftshift - whether to shift FFT
+      vector before logging\n          longitude  - local longitude in decimal form\n    ',
       ['extension', 'fftshift', 'filepat', 'fmtstr', 'formatter', 'localtime', 'logtime',
       'longitude'])
     bus_sink: false

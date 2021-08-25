@@ -16,7 +16,9 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
        strip-chart as output
        
        Params:
-          decim - how much to decimate input to produce 1 SPS"""
+          decim - how much to decimate input to produce 1 SPS
+          seconds - how many seconds long is the stripchart vector
+    """
 
     def __init__(self, decim=100,seconds=3600):  # only default arguments here
         """arguments to this function show up as parameters in GRC"""
@@ -53,16 +55,25 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
 
     def general_work(self, input_items, output_items):
         """take an input item(s), place appropriately in stripchart output"""
+ 
         #
-        # For each of the input items
+        # Our averager hasn't been initialized with a
+        #  "prime the pump" value?
+        # Do it now.
         #
         if (self.avg == 0.0):
             self.avg = input_items[0][0]
+            #
+            # Also init the strip-chart to this level
+            #
             self.strip = [self.avg]*len(self.strip)
-
+        #
+        # For each of the input items
+        #
         for x in range(len(input_items[0])):
             #
-            # Two-point moving average for now
+            # Effectively we get a N-point moving average
+            # WHere "N" is "decim"
             #
             self.avg += input_items[0][x]
             self.counter += 1
@@ -71,6 +82,10 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
             # Time to output an item into the stripchart
             #
             if (self.counter >= self.decim):
+                
+                #
+                # Reduce by decim
+                #
                 self.avg /= self.decim
                 
                 #
@@ -80,7 +95,8 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
                 self.strip = [self.avg] + self.strip[:-1]
                 self.counter = 0
         #
-        # Stuff output items with the contents of the stripchart
+        # Stuff output items with the contents of the 
+        #  possibly-updated stripchart
         #
         for y in range(len(output_items[0])):
             output_items[0][y] = self.strip
