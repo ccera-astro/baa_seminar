@@ -83,8 +83,7 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
         # Stuff output items with the contents of the stripchart
         #
         for y in range(len(output_items[0])):
-            for x in range(len(self.strip)):
-                output_items[0][y][x] = self.strip[x]
+            output_items[0][y] = self.strip
         
         #
         # Tell scheduler we consumed items

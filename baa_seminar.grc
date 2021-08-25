@@ -46,7 +46,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [904, 292.0]
+    coordinate: [600, 20.0]
     rotation: 0
     state: true
 - name: data_rate
@@ -67,6 +67,27 @@ blocks:
     coordinate: [16, 236.0]
     rotation: 0
     state: enabled
+- name: dc_gain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Detector Multiplier
+    min_len: '100'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '10'
+    stop: '1000'
+    value: dmult
+    widget: counter
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 20.0]
+    rotation: 0
+    state: true
 - name: dophigh
   id: variable
   parameters:
@@ -181,19 +202,20 @@ blocks:
       \    \"\"\"\n\n    def __init__(self, fftsize=2048,collect=True):  # only default\
       \ arguments here\n        \"\"\"arguments to this function show up as parameters\
       \ in GRC\"\"\"\n        gr.sync_block.__init__(\n            self,\n       \
-      \     name='Baseline Compensator',   # will show up in GRC\n            in_sig=[(np.float32,fftsize)],\n\
-      \            out_sig=[(np.float32,fftsize)]\n        )\n        # if an attribute\
-      \ with the same name as a parameter is found,\n        # a callback is registered\
-      \ (properties work, too).\n        self.collect = collect\n        self.fftbuf\
-      \ = np.zeros(fftsize,dtype=np.float32)\n\n    def work(self, input_items, output_items):\n\
-      \        \"\"\"Accumulate baseline data, apply corrections when asked\"\"\"\n\
-      \        if (self.collect == True):\n            #\n            # Collect samples,\
-      \ and compute a moving average on them\n            # They're already fairly-well\
-      \ smoothed, so we don't\n            # need to go overboard\n            #\n\
-      \            for x in range(len(input_items[0])):\n                self.fftbuf\
-      \ = np.add(self.fftbuf, input_items[0][x])\n                self.fftbuf = np.divide(self.fftbuf,\
-      \ [2.0]*len(self.fftbuf))\n            self.avg = sum(self.fftbuf)/len(self.fftbuf)\n\
-      \            self.avg *= 1.5\n            \n            for x in range(len(output_items[0])):\n\
+      \     name='BAA:Baseline Compensator',   # will show up in GRC\n           \
+      \ in_sig=[(np.float32,fftsize)],\n            out_sig=[(np.float32,fftsize)]\n\
+      \        )\n        # if an attribute with the same name as a parameter is found,\n\
+      \        # a callback is registered (properties work, too).\n        self.collect\
+      \ = collect\n        self.fftbuf = np.zeros(fftsize,dtype=np.float32)\n\n  \
+      \  def work(self, input_items, output_items):\n        \"\"\"Accumulate baseline\
+      \ data, apply corrections when asked\"\"\"\n        if (self.collect == True):\n\
+      \            #\n            # Collect samples, and compute a moving average\
+      \ on them\n            # They're already fairly-well smoothed, so we don't\n\
+      \            # need to go overboard\n            #\n            for x in range(len(input_items[0])):\n\
+      \                self.fftbuf = np.add(self.fftbuf, input_items[0][x])\n    \
+      \            self.fftbuf = np.divide(self.fftbuf, [2.0]*len(self.fftbuf))\n\
+      \            self.avg = sum(self.fftbuf)/len(self.fftbuf)\n            self.avg\
+      \ *= 1.5\n            \n            for x in range(len(output_items[0])):\n\
       \                output_items[0][x] = input_items[0][x]\n        else:\n   \
       \         for x in range(len(output_items[0])):\n                output_items[0][x]\
       \ = np.subtract(input_items[0][x], self.fftbuf)\n                output_items[0][x]\
@@ -201,19 +223,19 @@ blocks:
     affinity: ''
     alias: ''
     collect: True if correct_baseline == False else False
-    comment: ''
+    comment: Optionally apply baseline-subtraction
     fftsize: '2048'
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    _io_cache: ('Baseline Compensator', 'blk', [('fftsize', '2048'), ('collect', 'True')],
-      [('0', 'float', 2048)], [('0', 'float', 2048)], 'Baseline compensator block\n         Takes
-      in an integrated FFT vector and either outputs that vector, or\n         outputs
-      a baseline-subtracted version of that vector\n    ', ['collect'])
+    _io_cache: ('BAA:Baseline Compensator', 'blk', [('fftsize', '2048'), ('collect',
+      'True')], [('0', 'float', 2048)], [('0', 'float', 2048)], 'Baseline compensator
+      block\n         Takes in an integrated FFT vector and either outputs that vector,
+      or\n         outputs a baseline-subtracted version of that vector\n    ', ['collect'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1176, 916.0]
+    coordinate: [1632, 1012.0]
     rotation: 0
     state: true
 - name: blocks_complex_to_mag_squared_0
@@ -233,7 +255,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 1216.0]
+    coordinate: [224, 1316.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_mag_squared_1
@@ -241,7 +263,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: Convert to power estimate
     maxoutbuf: '0'
     minoutbuf: '0'
     vlen: fftsize
@@ -249,7 +271,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [648, 1028.0]
+    coordinate: [792, 1028.0]
     rotation: 0
     state: true
 - name: blocks_keep_one_in_n_0
@@ -271,7 +293,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [728, 1216.0]
+    coordinate: [688, 1284.0]
     rotation: 0
     state: enabled
 - name: blocks_keep_one_in_n_1
@@ -279,7 +301,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: Decimate
     maxoutbuf: '0'
     minoutbuf: '0'
     n: int(fftrate/data_rate)
@@ -289,7 +311,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1056, 1020.0]
+    coordinate: [1368, 1012.0]
     rotation: 0
     state: true
 - name: blocks_multiply_conjugate_cc_0
@@ -308,6 +330,24 @@ blocks:
     coordinate: [968, 720.0]
     rotation: 0
     state: disabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Apply the detector-multiplier
+    const: float(dc_gain)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 1276.0]
+    rotation: 0
+    state: true
 - name: blocks_nlog10_ff_0
   id: blocks_nlog10_ff
   parameters:
@@ -325,7 +365,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1212.0, 1128]
+    coordinate: [1868.0, 1120]
     rotation: 270
     state: true
 - name: blocks_null_sink_1
@@ -342,7 +382,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 576.0]
+    coordinate: [176, 1524.0]
     rotation: 0
     state: true
 - name: blocks_stream_to_vector_0
@@ -362,7 +402,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [208, 1032.0]
+    coordinate: [256, 1052.0]
     rotation: 0
     state: true
 - name: device
@@ -380,6 +420,23 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [600, 684.0]
+    rotation: 0
+    state: true
+- name: dmult
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Detector Multiplier
+    short_id: ''
+    type: eng_float
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 788.0]
     rotation: 0
     state: true
 - name: fft_vxx_0
@@ -400,7 +457,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 988.0]
+    coordinate: [504, 988.0]
     rotation: 0
     state: true
 - name: flipper
@@ -415,8 +472,8 @@ blocks:
       \ the order of a vector\"\"\"\n\n    def __init__(self, fftsize=2048,enabled=True):\
       \  # only default arguments here\n        \"\"\"arguments to this function show\
       \ up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n         \
-      \   self,\n            name='Flipper',   # will show up in GRC\n           \
-      \ in_sig=[(np.float32,fftsize)],\n            out_sig=[(np.float32,fftsize)]\n\
+      \   self,\n            name='BAA:Flipper',   # will show up in GRC\n       \
+      \     in_sig=[(np.float32,fftsize)],\n            out_sig=[(np.float32,fftsize)]\n\
       \        )\n        # if an attribute with the same name as a parameter is found,\n\
       \        # a callback is registered (properties work, too).\n        self.enabled\
       \ = enabled\n\n    def work(self, input_items, output_items):\n        \"\"\"\
@@ -426,19 +483,23 @@ blocks:
       \        return len(output_items[0])\n"
     affinity: ''
     alias: ''
-    comment: ''
+    comment: 'Optionally flip the spectral vector for
+
+      display--for conventional display of
+
+      redshift/blueshift'
     enabled: True if velocity != 0 else False
     fftsize: fftsize
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    _io_cache: ('Flipper', 'blk', [('fftsize', '2048'), ('enabled', 'True')], [('0',
-      'float', 2048)], [('0', 'float', 2048)], 'Flipper -- simply reverse the order
-      of a vector', ['enabled'])
+    _io_cache: ('BAA:Flipper', 'blk', [('fftsize', '2048'), ('enabled', 'True')],
+      [('0', 'float', 2048)], [('0', 'float', 2048)], 'Flipper -- simply reverse the
+      order of a vector', ['enabled'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1264, 428.0]
+    coordinate: [1280, 412.0]
     rotation: 0
     state: true
 - name: formatter
@@ -533,7 +594,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1472, 28.0]
+    coordinate: [1624, 12.0]
     rotation: 0
     state: enabled
 - name: freq
@@ -593,7 +654,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 804.0]
+    coordinate: [488, 788.0]
     rotation: 0
     state: true
 - name: longitude
@@ -629,7 +690,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 900.0]
+    coordinate: [160, 916.0]
     rotation: 0
     state: true
 - name: note_0_0
@@ -648,7 +709,20 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 1292.0]
+    coordinate: [160, 1180.0]
+    rotation: 0
+    state: true
+- name: note_1
+  id: note
+  parameters:
+    alias: ''
+    comment: Placeholder for 2nd channel
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [80, 1436.0]
     rotation: 0
     state: true
 - name: osmosdr_source_0
@@ -1005,7 +1079,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [256, 300.0]
+    coordinate: [256, 260.0]
     rotation: 0
     state: true
 - name: qtgui_vector_sink_f_0
@@ -1078,7 +1152,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1472, 204.0]
+    coordinate: [1624, 204.0]
     rotation: 0
     state: enabled
 - name: qtgui_vector_sink_f_1
@@ -1151,7 +1225,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1472, 388.0]
+    coordinate: [1624, 420.0]
     rotation: 0
     state: true
 - name: rfgain
@@ -1203,7 +1277,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [472, 1212.0]
+    coordinate: [448, 1308.0]
     rotation: 0
     state: enabled
 - name: single_pole_iir_filter_xx_1
@@ -1212,7 +1286,7 @@ blocks:
     affinity: ''
     alias: ''
     alpha: ra_funcs.getalpha(1.0/sinteg,fftrate)
-    comment: ''
+    comment: Integrate
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -1221,7 +1295,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 1020.0]
+    coordinate: [1064, 1020.0]
     rotation: 0
     state: true
 - name: sinteg
@@ -1297,10 +1371,9 @@ blocks:
       \         #\n                self.strip = [self.avg] + self.strip[:-1]\n   \
       \             self.counter = 0\n        #\n        # Stuff output items with\
       \ the contents of the stripchart\n        #\n        for y in range(len(output_items[0])):\n\
-      \            for x in range(len(self.strip)):\n                output_items[0][y][x]\
-      \ = self.strip[x]\n        \n        #\n        # Tell scheduler we consumed\
-      \ items\n        #\n        self.consume(0, len(input_items[0]))\n        return\
-      \ len(output_items[0])\n"
+      \            output_items[0][y] = self.strip\n        \n        #\n        #\
+      \ Tell scheduler we consumed items\n        #\n        self.consume(0, len(input_items[0]))\n\
+      \        return len(output_items[0])\n"
     affinity: ''
     alias: ''
     comment: Produces a "stripchart" type vector
@@ -1316,7 +1389,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1192, 268.0]
+    coordinate: [1224, 236.0]
     rotation: 0
     state: enabled
 - name: tinteg
@@ -1412,7 +1485,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1472, 572.0]
+    coordinate: [1624, 644.0]
     rotation: 0
     state: enabled
 - name: velocity
@@ -1442,7 +1515,20 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [552, 244.0]
+    coordinate: [560, 356.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_0_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rf2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 468.0]
     rotation: 0
     state: true
 - name: virtual_sink_1
@@ -1455,7 +1541,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 1268.0]
+    coordinate: [1752, 1292.0]
     rotation: 180
     state: true
 - name: virtual_sink_2
@@ -1468,7 +1554,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 1164.0]
+    coordinate: [1248, 1292.0]
     rotation: 0
     state: true
 - name: virtual_source_0
@@ -1481,7 +1567,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [48, 1028.0]
+    coordinate: [32, 1044.0]
     rotation: 0
     state: true
 - name: virtual_source_0_0
@@ -1494,7 +1580,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [88, 1212.0]
+    coordinate: [32, 1308.0]
     rotation: 0
     state: true
 - name: virtual_source_1
@@ -1507,7 +1593,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1040, 452.0]
+    coordinate: [1056, 500.0]
     rotation: 0
     state: true
 - name: virtual_source_2
@@ -1520,7 +1606,20 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1048, 84.0]
+    coordinate: [1024, 84.0]
+    rotation: 0
+    state: true
+- name: virtual_source_3
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rf2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 1516.0]
     rotation: 0
     state: true
 
@@ -1528,14 +1627,15 @@ connections:
 - [baseline_compensate, '0', blocks_nlog10_ff_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', single_pole_iir_filter_xx_0, '0']
 - [blocks_complex_to_mag_squared_1, '0', single_pole_iir_filter_xx_1, '0']
-- [blocks_keep_one_in_n_0, '0', virtual_sink_2, '0']
+- [blocks_keep_one_in_n_0, '0', blocks_multiply_const_vxx_0, '0']
 - [blocks_keep_one_in_n_1, '0', baseline_compensate, '0']
+- [blocks_multiply_const_vxx_0, '0', virtual_sink_2, '0']
 - [blocks_nlog10_ff_0, '0', virtual_sink_1, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
 - [fft_vxx_0, '0', blocks_complex_to_mag_squared_1, '0']
 - [flipper, '0', qtgui_vector_sink_f_1, '0']
 - [osmosdr_source_0, '0', virtual_sink_0, '0']
-- [osmosdr_source_0, '1', blocks_null_sink_1, '0']
+- [osmosdr_source_0, '1', virtual_sink_0_0, '0']
 - [single_pole_iir_filter_xx_0, '0', blocks_keep_one_in_n_0, '0']
 - [single_pole_iir_filter_xx_1, '0', blocks_keep_one_in_n_1, '0']
 - [stripchart, '0', qtgui_vector_sink_f_0, '0']
@@ -1545,6 +1645,7 @@ connections:
 - [virtual_source_1, '0', vectorlogger, '0']
 - [virtual_source_2, '0', formatter, '0']
 - [virtual_source_2, '0', stripchart, '0']
+- [virtual_source_3, '0', blocks_null_sink_1, '0']
 
 metadata:
   file_format: 1
