@@ -119,6 +119,30 @@ blocks:
     coordinate: [16, 388.0]
     rotation: 0
     state: enabled
+- name: freqlow
+  id: variable
+  parameters:
+    comment: ''
+    value: (freq-(samp_rate/2.0))/1.0e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 84.0]
+    rotation: 0
+    state: enabled
+- name: freqstep
+  id: variable
+  parameters:
+    comment: ''
+    value: (samp_rate/fftsize)/1.0e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 84.0]
+    rotation: 0
+    state: enabled
 - name: samp_rate
   id: variable
   parameters:
@@ -143,7 +167,7 @@ blocks:
     coordinate: [16, 580.0]
     rotation: 0
     state: enabled
-- name: baseline_compare
+- name: baseline_compensate
   id: epy_block
   parameters:
     _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
@@ -377,6 +401,44 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [392, 988.0]
+    rotation: 0
+    state: true
+- name: flipper
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\n\n\nclass blk(gr.sync_block):  # other base classes\
+      \ are basic_block, decim_block, interp_block\n    \"\"\"Flipper -- simply reverse\
+      \ the order of a vector\"\"\"\n\n    def __init__(self, fftsize=2048,enabled=True):\
+      \  # only default arguments here\n        \"\"\"arguments to this function show\
+      \ up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n         \
+      \   self,\n            name='Flipper',   # will show up in GRC\n           \
+      \ in_sig=[(np.float32,fftsize)],\n            out_sig=[(np.float32,fftsize)]\n\
+      \        )\n        # if an attribute with the same name as a parameter is found,\n\
+      \        # a callback is registered (properties work, too).\n        self.enabled\
+      \ = enabled\n\n    def work(self, input_items, output_items):\n        \"\"\"\
+      Flip order\"\"\"\n        for x in range(len(output_items[0])):\n          \
+      \  if (self.enabled == True):\n                output_items[0][x] = input_items[0][x][::-1]\n\
+      \            else:\n                output_items[0][x] = input_items[0][x]\n\
+      \        return len(output_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    enabled: True if velocity != 0 else False
+    fftsize: fftsize
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Flipper', 'blk', [('fftsize', '2048'), ('enabled', 'True')], [('0',
+      'float', 2048)], [('0', 'float', 2048)], 'Flipper -- simply reverse the order
+      of a vector', ['enabled'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1264, 428.0]
     rotation: 0
     state: true
 - name: formatter
@@ -1061,7 +1123,7 @@ blocks:
     label9: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: Doppler Velocity
+    name: '"Doppler Velocity" if velocity == True else "Frequency"'
     nconnections: '1'
     ref_level: '0'
     showports: 'False'
@@ -1077,10 +1139,10 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    x_axis_label: Doppler (km/s)
-    x_start: doplow
-    x_step: (dophigh-doplow)/fftsize
-    x_units: km/s
+    x_axis_label: '"Red shift(km/s)" if velocity == True else "Frequency (MHz)"'
+    x_start: doplow if velocity == True else freqlow
+    x_step: (dophigh-doplow)/fftsize if velocity == True else freqstep
+    x_units: '"km/s" if velocity == True else "MHz"'
     y_axis_label: Rel power (dB)
     y_units: dB
     ymax: '10'
@@ -1334,6 +1396,23 @@ blocks:
     coordinate: [1472, 572.0]
     rotation: 0
     state: enabled
+- name: velocity
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Show velocities
+    short_id: ''
+    type: intx
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 788.0]
+    rotation: 0
+    state: true
 - name: virtual_sink_0
   id: virtual_sink
   parameters:
@@ -1427,14 +1506,15 @@ blocks:
     state: true
 
 connections:
-- [baseline_compare, '0', blocks_nlog10_ff_0, '0']
+- [baseline_compensate, '0', blocks_nlog10_ff_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', single_pole_iir_filter_xx_0, '0']
 - [blocks_complex_to_mag_squared_1, '0', single_pole_iir_filter_xx_1, '0']
 - [blocks_keep_one_in_n_0, '0', virtual_sink_2, '0']
-- [blocks_keep_one_in_n_1, '0', baseline_compare, '0']
+- [blocks_keep_one_in_n_1, '0', baseline_compensate, '0']
 - [blocks_nlog10_ff_0, '0', virtual_sink_1, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
 - [fft_vxx_0, '0', blocks_complex_to_mag_squared_1, '0']
+- [flipper, '0', qtgui_vector_sink_f_1, '0']
 - [osmosdr_source_0, '0', virtual_sink_0, '0']
 - [osmosdr_source_0, '1', blocks_null_sink_1, '0']
 - [single_pole_iir_filter_xx_0, '0', blocks_keep_one_in_n_0, '0']
@@ -1442,7 +1522,7 @@ connections:
 - [stripchart, '0', qtgui_vector_sink_f_0, '0']
 - [virtual_source_0, '0', blocks_stream_to_vector_0, '0']
 - [virtual_source_0_0, '0', blocks_complex_to_mag_squared_0, '0']
-- [virtual_source_1, '0', qtgui_vector_sink_f_1, '0']
+- [virtual_source_1, '0', flipper, '0']
 - [virtual_source_1, '0', vectorlogger, '0']
 - [virtual_source_2, '0', formatter, '0']
 - [virtual_source_2, '0', stripchart, '0']
