@@ -1055,7 +1055,7 @@ blocks:
     ref_level: '0'
     showports: 'True'
     update_time: '0.250'
-    vlen: '3600'
+    vlen: seconds
     width1: '2'
     width10: '1'
     width2: '1'
@@ -1171,6 +1171,23 @@ blocks:
     coordinate: [175, 685]
     rotation: 0
     state: true
+- name: seconds
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Strip chart length, seconds
+    short_id: ''
+    type: intx
+    value: '3600'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 788.0]
+    rotation: 0
+    state: true
 - name: single_pole_iir_filter_xx_0
   id: single_pole_iir_filter_xx
   parameters:
@@ -1252,47 +1269,49 @@ blocks:
       \ base classes are basic_block, decim_block, interp_block\n    \"\"\"A strip\
       \ chart takes in a stream of floats and produces a 1 hour long\n       strip-chart\
       \ as output\n       \n       Params:\n          decim - how much to decimate\
-      \ input to produce 1 SPS\"\"\"\n\n    def __init__(self, decim=100):  # only\
-      \ default arguments here\n        \"\"\"arguments to this function show up as\
-      \ parameters in GRC\"\"\"\n        gr.basic_block.__init__(\n            self,\n\
-      \            name='BAA:Strip Chart',   # will show up in GRC\n            in_sig=[np.float32],\n\
-      \            out_sig=[(np.float32,3600)]\n        )\n        # if an attribute\
-      \ with the same name as a parameter is found,\n        # a callback is registered\
-      \ (properties work, too).\n        \n        #\n        # How much do we need\
-      \ to average the input to produce a 1SPS\n        #  output?\n        #\n  \
-      \      self.decim = decim\n        \n        #\n        # The stripchart vector\
-      \ itself--must be persistent in the\n        #  object instance\n        #\n\
-      \        self.strip = [0.0]*3600\n        \n        #\n        # keeps track\
-      \ of decimation\n        #\n        self.counter = 0\n        \n        #\n\
-      \        # We continuously average the input and store it here\n        #\n\
-      \        self.avg = 0.0\n\n    def general_work(self, input_items, output_items):\n\
-      \        \"\"\"take an input item(s), place appropriately in stripchart output\"\
-      \"\"\n        #\n        # For each of the input items\n        #\n        if\
-      \ (self.avg == 0.0):\n            self.avg = input_items[0][0]\n           \
-      \ self.strip = [self.avg]*len(self.strip)\n\n        for x in range(len(input_items[0])):\n\
-      \            #\n            # Two-point moving average for now\n           \
-      \ #\n            self.avg += input_items[0][x]\n            self.counter +=\
-      \ 1\n            \n            #\n            # Time to output an item into\
-      \ the stripchart\n            #\n            if (self.counter >= self.decim):\n\
-      \                self.avg /= self.decim\n                \n                #\n\
-      \                # Use python array notation to effect a quick\n           \
-      \     #  shift of items in the stripchart array\n                #\n       \
-      \         self.strip = [self.avg] + self.strip[:-1]\n                self.counter\
-      \ = 0\n        #\n        # Stuff output items with the contents of the stripchart\n\
-      \        #\n        for y in range(len(output_items[0])):\n            for x\
-      \ in range(len(self.strip)):\n                output_items[0][y][x] = self.strip[x]\n\
-      \        \n        #\n        # Tell scheduler we consumed items\n        #\n\
-      \        self.consume(0, len(input_items[0]))\n        return len(output_items[0])\n"
+      \ input to produce 1 SPS\"\"\"\n\n    def __init__(self, decim=100,seconds=3600):\
+      \  # only default arguments here\n        \"\"\"arguments to this function show\
+      \ up as parameters in GRC\"\"\"\n        gr.basic_block.__init__(\n        \
+      \    self,\n            name='BAA:Strip Chart',   # will show up in GRC\n  \
+      \          in_sig=[np.float32],\n            out_sig=[(np.float32,seconds)]\n\
+      \        )\n        # if an attribute with the same name as a parameter is found,\n\
+      \        # a callback is registered (properties work, too).\n        \n    \
+      \    #\n        # How much do we need to average the input to produce a 1SPS\n\
+      \        #  output?\n        #\n        self.decim = decim\n        \n     \
+      \   #\n        # The stripchart vector itself--must be persistent in the\n \
+      \       #  object instance\n        #\n        self.strip = [0.0]*seconds\n\
+      \        \n        #\n        # keeps track of decimation\n        #\n     \
+      \   self.counter = 0\n        \n        #\n        # We continuously average\
+      \ the input and store it here\n        #\n        self.avg = 0.0\n\n    def\
+      \ general_work(self, input_items, output_items):\n        \"\"\"take an input\
+      \ item(s), place appropriately in stripchart output\"\"\"\n        #\n     \
+      \   # For each of the input items\n        #\n        if (self.avg == 0.0):\n\
+      \            self.avg = input_items[0][0]\n            self.strip = [self.avg]*len(self.strip)\n\
+      \n        for x in range(len(input_items[0])):\n            #\n            #\
+      \ Two-point moving average for now\n            #\n            self.avg += input_items[0][x]\n\
+      \            self.counter += 1\n            \n            #\n            # Time\
+      \ to output an item into the stripchart\n            #\n            if (self.counter\
+      \ >= self.decim):\n                self.avg /= self.decim\n                \n\
+      \                #\n                # Use python array notation to effect a\
+      \ quick\n                #  shift of items in the stripchart array\n       \
+      \         #\n                self.strip = [self.avg] + self.strip[:-1]\n   \
+      \             self.counter = 0\n        #\n        # Stuff output items with\
+      \ the contents of the stripchart\n        #\n        for y in range(len(output_items[0])):\n\
+      \            for x in range(len(self.strip)):\n                output_items[0][y][x]\
+      \ = self.strip[x]\n        \n        #\n        # Tell scheduler we consumed\
+      \ items\n        #\n        self.consume(0, len(input_items[0]))\n        return\
+      \ len(output_items[0])\n"
     affinity: ''
     alias: ''
     comment: Produces a "stripchart" type vector
     decim: data_rate
     maxoutbuf: '0'
     minoutbuf: '0'
+    seconds: seconds
   states:
-    _io_cache: ('BAA:Strip Chart', 'blk', [('decim', '100')], [('0', 'float', 1)],
-      [('0', 'float', 3600)], 'A strip chart takes in a stream of floats and produces
-      a 1 hour long\n       strip-chart as output\n       \n       Params:\n          decim
+    _io_cache: ('BAA:Strip Chart', 'blk', [('decim', '100'), ('seconds', '3600')],
+      [('0', 'float', 1)], [('0', 'float', 3600)], 'A strip chart takes in a stream
+      of floats and produces a 1 hour long\n       strip-chart as output\n       \n       Params:\n          decim
       - how much to decimate input to produce 1 SPS', ['decim'])
     bus_sink: false
     bus_source: false

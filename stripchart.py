@@ -18,13 +18,13 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
        Params:
           decim - how much to decimate input to produce 1 SPS"""
 
-    def __init__(self, decim=100):  # only default arguments here
+    def __init__(self, decim=100,seconds=3600):  # only default arguments here
         """arguments to this function show up as parameters in GRC"""
         gr.basic_block.__init__(
             self,
             name='BAA:Strip Chart',   # will show up in GRC
             in_sig=[np.float32],
-            out_sig=[(np.float32,3600)]
+            out_sig=[(np.float32,seconds)]
         )
         # if an attribute with the same name as a parameter is found,
         # a callback is registered (properties work, too).
@@ -39,7 +39,7 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
         # The stripchart vector itself--must be persistent in the
         #  object instance
         #
-        self.strip = [0.0]*3600
+        self.strip = [0.0]*seconds
         
         #
         # keeps track of decimation
