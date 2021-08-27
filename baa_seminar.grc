@@ -176,6 +176,18 @@ blocks:
     coordinate: [16, 84.0]
     rotation: 0
     state: enabled
+- name: split_ratio
+  id: variable
+  parameters:
+    comment: ''
+    value: '20'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 1476.0]
+    rotation: 0
+    state: true
 - name: winpower
   id: variable
   parameters:
@@ -238,7 +250,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1632, 1012.0]
+    coordinate: [1552, 1012.0]
     rotation: 0
     state: true
 - name: blocks_complex_to_mag_squared_0
@@ -258,7 +270,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [224, 1316.0]
+    coordinate: [288, 1348.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_mag_squared_1
@@ -283,7 +295,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '10'
+    decim: split_ratio
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -292,7 +304,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 1340.0]
+    coordinate: [784, 1340.0]
     rotation: 0
     state: true
 - name: blocks_keep_one_in_n_0
@@ -307,14 +319,14 @@ blocks:
       reduce to ''data_rate'' Hz'
     maxoutbuf: '0'
     minoutbuf: '0'
-    n: int(int(samp_rate/data_rate)/10)
+    n: int(int(samp_rate/data_rate)/split_ratio)
     type: float
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 1284.0]
+    coordinate: [1288, 1364.0]
     rotation: 0
     state: enabled
 - name: blocks_keep_one_in_n_1
@@ -332,7 +344,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1368, 1012.0]
+    coordinate: [1320, 1012.0]
     rotation: 0
     state: true
 - name: blocks_multiply_conjugate_cc_0
@@ -366,7 +378,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1168, 1276.0]
+    coordinate: [1544, 1356.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0
@@ -374,8 +386,8 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
-    const: '0.1'
+    comment: Because the integrator doesn't do a "reduce"
+    const: 1.0/split_ratio
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -384,7 +396,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 1212.0]
+    coordinate: [1032, 1348.0]
     rotation: 0
     state: true
 - name: blocks_nlog10_ff_0
@@ -404,8 +416,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1868.0, 1120]
-    rotation: 270
+    coordinate: [1840, 1036.0]
+    rotation: 0
     state: true
 - name: blocks_null_sink_1
   id: blocks_null_sink
@@ -752,7 +764,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [160, 1180.0]
+    coordinate: [232, 1196.0]
     rotation: 0
     state: true
 - name: note_1
@@ -784,7 +796,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [440, 1172.0]
+    coordinate: [808, 1204.0]
     rotation: 0
     state: true
 - name: osmosdr_source_0
@@ -1329,7 +1341,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    alpha: ra_funcs.getalpha(1.0/(tinteg*0.10),samp_rate)
+    alpha: ra_funcs.getalpha(1.0/(tinteg/split_ratio),samp_rate)
     comment: A simple filter/integrator
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1339,7 +1351,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [448, 1308.0]
+    coordinate: [536, 1332.0]
     rotation: 0
     state: enabled
 - name: single_pole_iir_filter_xx_1
@@ -1430,19 +1442,19 @@ blocks:
       \ in range(len(input_items[0])):\n            #\n            # Effectively we\
       \ get a N-point moving average\n            # WHere \"N\" is \"decim\"\n   \
       \         #\n            self.avg += input_items[0][x]\n            self.counter\
-      \ += 1\n            self.pewty = input_items[0][x]\n            \n         \
-      \   #\n            # Time to output an item into the stripchart\n          \
-      \  #\n            if (self.counter >= self.decim):\n                \n     \
-      \           #\n                # Reduce by decim\n                #\n      \
-      \          self.avg /= self.counter\n                \n                #\n \
-      \               # Use python array notation to effect a quick\n            \
-      \    #  shift of items in the stripchart array\n                #\n        \
-      \        self.strip = [self.avg] + self.strip[:-1]\n                self.counter\
-      \ = 0\n                self.avg = 1.0e-10\n        #\n        # Stuff output\
-      \ items with the contents of the \n        #  possibly-updated stripchart\n\
-      \        #\n        for y in range(len(output_items[0])):\n            output_items[0][y]\
-      \ = self.strip\n        \n        #\n        # Tell scheduler we consumed items\n\
-      \        #\n        self.consume(0, len(input_items[0]))\n        return len(output_items[0])\n"
+      \ += 1\n            \n            #\n            # Time to output an item into\
+      \ the stripchart\n            #\n            if (self.counter >= self.decim):\n\
+      \                \n                #\n                # Reduce by decim\n  \
+      \              #\n                self.avg /= self.counter\n               \
+      \ \n                #\n                # Use python array notation to effect\
+      \ a quick\n                #  shift of items in the stripchart array\n     \
+      \           #\n                self.strip = [self.avg] + self.strip[:-1]\n \
+      \               self.counter = 0\n                self.avg = 1.0e-15\n     \
+      \   #\n        # Stuff output items with the contents of the \n        #  possibly-updated\
+      \ stripchart\n        #\n        for y in range(len(output_items[0])):\n   \
+      \         output_items[0][y] = self.strip\n        \n        #\n        # Tell\
+      \ scheduler we consumed items\n        #\n        self.consume(0, len(input_items[0]))\n\
+      \        return len(output_items[0])\n"
     affinity: ''
     alias: ''
     comment: Produces a "stripchart" type vector
@@ -1639,7 +1651,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1752, 1292.0]
+    coordinate: [1872, 1220.0]
     rotation: 180
     state: true
 - name: virtual_sink_2
@@ -1652,7 +1664,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1440, 1292.0]
+    coordinate: [1840, 1364.0]
     rotation: 0
     state: true
 - name: virtual_source_0
