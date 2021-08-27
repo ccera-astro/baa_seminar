@@ -581,7 +581,7 @@ blocks:
     filepat: '''tp-%04d%02d%02d'''
     fmtstr: '''%11.9f'''
     formatter: None
-    localtime: 'True'
+    localtime: False if utc != 0 else True
     logtime: logtime
     longitude: longitude
     maxoutbuf: '0'
@@ -1423,6 +1423,23 @@ blocks:
     coordinate: [744, 700.0]
     rotation: 0
     state: true
+- name: utc
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Log in UTC time
+    short_id: ''
+    type: intx
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 788.0]
+    rotation: 0
+    state: true
 - name: vectorlogger
   id: epy_block
   parameters:
@@ -1490,7 +1507,7 @@ blocks:
     filepat: '''fft-0-%04d%02d%02d'''
     fmtstr: '''%6.2f'''
     formatter: None
-    localtime: 'False'
+    localtime: False if utc != 0 else True
     logtime: logtime*3
     longitude: longitude
     maxoutbuf: '0'
