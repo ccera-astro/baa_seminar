@@ -277,6 +277,24 @@ blocks:
     coordinate: [792, 1028.0]
     rotation: 0
     state: true
+- name: blocks_integrate_xx_0
+  id: blocks_integrate_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '10'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 1340.0]
+    rotation: 0
+    state: true
 - name: blocks_keep_one_in_n_0
   id: blocks_keep_one_in_n
   parameters:
@@ -289,14 +307,14 @@ blocks:
       reduce to ''data_rate'' Hz'
     maxoutbuf: '0'
     minoutbuf: '0'
-    n: int(samp_rate/data_rate)
+    n: int(int(samp_rate/data_rate)/10)
     type: float
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [688, 1284.0]
+    coordinate: [928, 1284.0]
     rotation: 0
     state: enabled
 - name: blocks_keep_one_in_n_1
@@ -348,7 +366,25 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 1276.0]
+    coordinate: [1168, 1276.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '0.1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 1212.0]
     rotation: 0
     state: true
 - name: blocks_nlog10_ff_0
@@ -569,7 +605,7 @@ blocks:
       \ \"a\")\n                fp.write(\"%02d,%02d,%02d,\" % (ltp.tm_hour, ltp.tm_min,\
       \ ltp.tm_sec))\n                fp.write(\"%s,\" % ra_funcs.cur_sidereal(self.longitude))\n\
       \                for x in range(self.nchan):\n                    self.avg[x]\
-      \ /= self.acnt[x]\n                    self.acnt[x] = 0\n                  \
+      \ /= self.acnt[x]\n                    self.acnt[x] = 1\n                  \
       \  fp.write (self.fmtstr  % (self.avg[x]))\n                    if (x < self.nchan-1):\n\
       \                        fp.write(\",\")\n                fp.write(\"\\n\")\n\
       \                fp.close()\n            else:\n                self.formatter(self.filepat,self.extension,self.avg[0],self.avg[1])\n\
@@ -730,6 +766,25 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [80, 1436.0]
+    rotation: 0
+    state: true
+- name: note_2
+  id: note
+  parameters:
+    alias: ''
+    comment: 'There are 32-bit-float numerical
+
+      issues when using very-small ALPHA
+
+      values in the IIR.
+
+      So, we do the integration in two stages.'
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 1172.0]
     rotation: 0
     state: true
 - name: osmosdr_source_0
@@ -1274,7 +1329,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    alpha: ra_funcs.getalpha(1.0/tinteg,samp_rate)
+    alpha: ra_funcs.getalpha(1.0/(tinteg*0.10),samp_rate)
     comment: A simple filter/integrator
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1331,7 +1386,7 @@ blocks:
     label: Sample Rate (SPS)
     short_id: ''
     type: eng_float
-    value: 2.56e6
+    value: 6e6
   states:
     bus_sink: false
     bus_source: false
@@ -1369,24 +1424,25 @@ blocks:
       \"\"\n \n        #\n        # Our averager hasn't been initialized with a\n\
       \        #  \"prime the pump\" value?\n        # Do it now.\n        #\n   \
       \     if (self.avg == 0.0):\n            self.avg = input_items[0][0]\n    \
-      \        #\n            # Also init the strip-chart to this level\n        \
-      \    #\n            self.strip = [self.avg]*len(self.strip)\n        #\n   \
-      \     # For each of the input items\n        #\n        for x in range(len(input_items[0])):\n\
-      \            #\n            # Effectively we get a N-point moving average\n\
-      \            # WHere \"N\" is \"decim\"\n            #\n            self.avg\
-      \ += input_items[0][x]\n            self.counter += 1\n            \n      \
-      \      #\n            # Time to output an item into the stripchart\n       \
-      \     #\n            if (self.counter >= self.decim):\n                \n  \
-      \              #\n                # Reduce by decim\n                #\n   \
-      \             self.avg /= self.decim\n                \n                #\n\
-      \                # Use python array notation to effect a quick\n           \
-      \     #  shift of items in the stripchart array\n                #\n       \
-      \         self.strip = [self.avg] + self.strip[:-1]\n                self.counter\
-      \ = 0\n        #\n        # Stuff output items with the contents of the \n \
-      \       #  possibly-updated stripchart\n        #\n        for y in range(len(output_items[0])):\n\
-      \            output_items[0][y] = self.strip\n        \n        #\n        #\
-      \ Tell scheduler we consumed items\n        #\n        self.consume(0, len(input_items[0]))\n\
-      \        return len(output_items[0])\n"
+      \        self.counter = 0\n            #\n            # Also init the strip-chart\
+      \ to this level\n            #\n            self.strip = [self.avg]*len(self.strip)\n\
+      \        #\n        # For each of the input items\n        #\n        for x\
+      \ in range(len(input_items[0])):\n            #\n            # Effectively we\
+      \ get a N-point moving average\n            # WHere \"N\" is \"decim\"\n   \
+      \         #\n            self.avg += input_items[0][x]\n            self.counter\
+      \ += 1\n            self.pewty = input_items[0][x]\n            \n         \
+      \   #\n            # Time to output an item into the stripchart\n          \
+      \  #\n            if (self.counter >= self.decim):\n                \n     \
+      \           #\n                # Reduce by decim\n                #\n      \
+      \          self.avg /= self.counter\n                \n                #\n \
+      \               # Use python array notation to effect a quick\n            \
+      \    #  shift of items in the stripchart array\n                #\n        \
+      \        self.strip = [self.avg] + self.strip[:-1]\n                self.counter\
+      \ = 0\n                self.avg = 1.0e-10\n        #\n        # Stuff output\
+      \ items with the contents of the \n        #  possibly-updated stripchart\n\
+      \        #\n        for y in range(len(output_items[0])):\n            output_items[0][y]\
+      \ = self.strip\n        \n        #\n        # Tell scheduler we consumed items\n\
+      \        #\n        self.consume(0, len(input_items[0]))\n        return len(output_items[0])\n"
     affinity: ''
     alias: ''
     comment: Produces a "stripchart" type vector
@@ -1415,7 +1471,7 @@ blocks:
     label: Integraton Time(secs) for TP
     short_id: ''
     type: eng_float
-    value: '10.0'
+    value: '45'
   states:
     bus_sink: false
     bus_source: false
@@ -1596,7 +1652,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 1292.0]
+    coordinate: [1440, 1292.0]
     rotation: 0
     state: true
 - name: virtual_source_0
@@ -1669,16 +1725,18 @@ connections:
 - [baseline_compensate, '0', blocks_nlog10_ff_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', single_pole_iir_filter_xx_0, '0']
 - [blocks_complex_to_mag_squared_1, '0', single_pole_iir_filter_xx_1, '0']
+- [blocks_integrate_xx_0, '0', blocks_multiply_const_xx_0, '0']
 - [blocks_keep_one_in_n_0, '0', blocks_multiply_const_vxx_0, '0']
 - [blocks_keep_one_in_n_1, '0', baseline_compensate, '0']
 - [blocks_multiply_const_vxx_0, '0', virtual_sink_2, '0']
+- [blocks_multiply_const_xx_0, '0', blocks_keep_one_in_n_0, '0']
 - [blocks_nlog10_ff_0, '0', virtual_sink_1, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
 - [fft_vxx_0, '0', blocks_complex_to_mag_squared_1, '0']
 - [flipper, '0', qtgui_vector_sink_f_1, '0']
 - [osmosdr_source_0, '0', virtual_sink_0, '0']
 - [osmosdr_source_0, '1', virtual_sink_0_0, '0']
-- [single_pole_iir_filter_xx_0, '0', blocks_keep_one_in_n_0, '0']
+- [single_pole_iir_filter_xx_0, '0', blocks_integrate_xx_0, '0']
 - [single_pole_iir_filter_xx_1, '0', blocks_keep_one_in_n_1, '0']
 - [stripchart, '0', qtgui_vector_sink_f_0, '0']
 - [virtual_source_0, '0', blocks_stream_to_vector_0, '0']

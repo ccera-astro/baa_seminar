@@ -131,7 +131,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                 fp.write("%s," % ra_funcs.cur_sidereal(self.longitude))
                 for x in range(self.nchan):
                     self.avg[x] /= self.acnt[x]
-                    self.acnt[x] = 0
+                    self.acnt[x] = 1
                     fp.write (self.fmtstr  % (self.avg[x]))
                     if (x < self.nchan-1):
                         fp.write(",")

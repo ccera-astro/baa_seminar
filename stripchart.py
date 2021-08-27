@@ -63,6 +63,7 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
         #
         if (self.avg == 0.0):
             self.avg = input_items[0][0]
+            self.counter = 0
             #
             # Also init the strip-chart to this level
             #
@@ -77,6 +78,7 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
             #
             self.avg += input_items[0][x]
             self.counter += 1
+            self.pewty = input_items[0][x]
             
             #
             # Time to output an item into the stripchart
@@ -86,7 +88,7 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
                 #
                 # Reduce by decim
                 #
-                self.avg /= self.decim
+                self.avg /= self.counter
                 
                 #
                 # Use python array notation to effect a quick
@@ -94,6 +96,7 @@ class blk(gr.basic_block):  # other base classes are basic_block, decim_block, i
                 #
                 self.strip = [self.avg] + self.strip[:-1]
                 self.counter = 0
+                self.avg = 1.0e-10
         #
         # Stuff output items with the contents of the 
         #  possibly-updated stripchart
