@@ -164,6 +164,34 @@ blocks:
     coordinate: [440, 84.0]
     rotation: 0
     state: enabled
+- name: pacer
+  id: variable_function_probe
+  parameters:
+    block_id: pacer_probe
+    comment: ''
+    function_args: ''
+    function_name: level
+    poll_rate: '1'
+    value: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 268.0]
+    rotation: 0
+    state: true
+- name: pps
+  id: variable
+  parameters:
+    comment: ''
+    value: pacer*0.0
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [768, 372.0]
+    rotation: 0
+    state: true
 - name: samp_rate
   id: variable
   parameters:
@@ -186,6 +214,22 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1312, 1476.0]
+    rotation: 0
+    state: true
+- name: variable_qtgui_label_0
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: ''
+    label: LMST
+    type: string
+    value: ra_funcs.cur_sidereal(longitude+pps).replace(",",":")
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 156.0]
     rotation: 0
     state: true
 - name: winpower
@@ -1156,6 +1200,20 @@ blocks:
     coordinate: [256, 260.0]
     rotation: 0
     state: true
+- name: pacer_probe
+  id: blocks_probe_signal_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 1468.0]
+    rotation: 0
+    state: true
 - name: qtgui_vector_sink_f_0
   id: qtgui_vector_sink_f
   parameters:
@@ -1749,6 +1807,7 @@ connections:
 - [osmosdr_source_0, '0', virtual_sink_0, '0']
 - [osmosdr_source_0, '1', virtual_sink_0_0, '0']
 - [single_pole_iir_filter_xx_0, '0', blocks_multiply_const_xx_0, '0']
+- [single_pole_iir_filter_xx_0, '0', pacer_probe, '0']
 - [single_pole_iir_filter_xx_1, '0', blocks_keep_one_in_n_1, '0']
 - [stripchart, '0', qtgui_vector_sink_f_0, '0']
 - [virtual_source_0, '0', blocks_stream_to_vector_0, '0']
