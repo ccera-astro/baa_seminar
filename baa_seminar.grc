@@ -37,7 +37,7 @@ blocks:
   parameters:
     comment: ''
     'false': 'False'
-    gui_hint: ''
+    gui_hint: Main@1:0,0
     label: Baseline Correction
     'true': 'True'
     type: bool
@@ -46,7 +46,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [600, 20.0]
+    coordinate: [32, 1780.0]
     rotation: 0
     state: true
 - name: data_rate
@@ -71,8 +71,8 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: ''
-    label: Detector Multiplier
+    gui_hint: Main@2:0,0
+    label: TP Multiplier
     min_len: '100'
     orient: Qt.Horizontal
     rangeType: float
@@ -85,7 +85,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 20.0]
+    coordinate: [216, 1780.0]
     rotation: 0
     state: true
 - name: dophigh
@@ -164,6 +164,84 @@ blocks:
     coordinate: [440, 84.0]
     rotation: 0
     state: enabled
+- name: ifreq
+  id: variable_qtgui_entry
+  parameters:
+    comment: ''
+    gui_hint: Main@2:1,0
+    label: Tuned Frequency
+    type: real
+    value: freq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [672, 1916.0]
+    rotation: 0
+    state: true
+- name: irfgain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: Main@2:1,1
+    label: RF Gain
+    min_len: '100'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '2.5'
+    stop: '50'
+    value: rfgain
+    widget: counter
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 1780.0]
+    rotation: 0
+    state: true
+- name: isinteg
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: Main@2:0,2
+    label: Spectral Integration Time
+    min_len: '100'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '10'
+    stop: '1000'
+    value: sinteg
+    widget: counter
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [512, 1780.0]
+    rotation: 0
+    state: true
+- name: itinteg
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: Main@2:0,1
+    label: TP Integration Time
+    min_len: '100'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '10'
+    stop: '500'
+    value: tinteg
+    widget: counter
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 1780.0]
+    rotation: 0
+    state: true
 - name: pacer
   id: variable_function_probe
   parameters:
@@ -179,7 +257,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 236.0]
+    coordinate: [288, 1996.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -215,7 +293,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 236.0]
+    coordinate: [176, 1996.0]
     rotation: 0
     state: true
 - name: variable_qtgui_label_0
@@ -223,7 +301,7 @@ blocks:
   parameters:
     comment: ''
     formatter: None
-    gui_hint: ''
+    gui_hint: 0,2
     label: LMST
     type: string
     value: ra_funcs.cur_sidereal(longitude+tiktok).replace(",",":")
@@ -231,7 +309,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 148.0]
+    coordinate: [192, 1908.0]
     rotation: 0
     state: true
 - name: winpower
@@ -246,6 +324,40 @@ blocks:
     coordinate: [16, 580.0]
     rotation: 0
     state: enabled
+- name: Main
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: 2,0,4,4
+    label0: Total Power
+    label1: Spectral
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: Controls
+    label3: Tab 3
+    label4: Tab 4
+    label5: Tab 5
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [48, 1908.0]
+    rotation: 0
+    state: true
 - name: baseline_compensate
   id: epy_block
   parameters:
@@ -1020,8 +1132,8 @@ blocks:
     dc_offset_mode7: '0'
     dc_offset_mode8: '0'
     dc_offset_mode9: '0'
-    freq0: freq
-    freq1: freq
+    freq0: ifreq
+    freq1: ifreq
     freq10: 100e6
     freq11: 100e6
     freq12: 100e6
@@ -1052,8 +1164,8 @@ blocks:
     freq7: 100e6
     freq8: 100e6
     freq9: 100e6
-    gain0: rfgain
-    gain1: rfgain
+    gain0: irfgain
+    gain1: irfgain
     gain10: '10'
     gain11: '10'
     gain12: '10'
@@ -1262,7 +1374,7 @@ blocks:
     color9: '"dark green"'
     comment: ''
     grid: 'True'
-    gui_hint: ''
+    gui_hint: Main@0:0,0,1,4
     label1: Detector
     label10: ''
     label2: ''
@@ -1335,7 +1447,7 @@ blocks:
     color9: '"dark green"'
     comment: ''
     grid: 'True'
-    gui_hint: ''
+    gui_hint: Main@1:1,0
     label1: Spectrum
     label10: ''
     label2: ''
@@ -1418,7 +1530,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    alpha: ra_funcs.getalpha(1.0/tinteg,samp_rate/split_ratio)
+    alpha: ra_funcs.getalpha(1.0/itinteg,samp_rate/split_ratio)
     comment: A simple filter/integrator
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1436,7 +1548,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    alpha: ra_funcs.getalpha(1.0/sinteg,fftrate)
+    alpha: ra_funcs.getalpha(1.0/isinteg,fftrate)
     comment: Integrate
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1702,7 +1814,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 356.0]
+    coordinate: [552, 348.0]
     rotation: 0
     state: true
 - name: virtual_sink_0_0
@@ -1793,7 +1905,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1024, 84.0]
+    coordinate: [1080, 52.0]
     rotation: 0
     state: true
 - name: virtual_source_3
