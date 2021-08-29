@@ -168,7 +168,9 @@ blocks:
   id: variable_function_probe
   parameters:
     block_id: pacer_probe
-    comment: ''
+    comment: 'A bit of a hack to get us an LMST
+
+      display'
     function_args: ''
     function_name: level
     poll_rate: '1'
@@ -177,19 +179,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 268.0]
-    rotation: 0
-    state: true
-- name: pps
-  id: variable
-  parameters:
-    comment: ''
-    value: pacer*0.0
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [768, 372.0]
+    coordinate: [856, 236.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -216,6 +206,18 @@ blocks:
     coordinate: [1312, 1476.0]
     rotation: 0
     state: true
+- name: tiktok
+  id: variable
+  parameters:
+    comment: ''
+    value: pacer*0.0
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 236.0]
+    rotation: 0
+    state: true
 - name: variable_qtgui_label_0
   id: variable_qtgui_label
   parameters:
@@ -224,12 +226,12 @@ blocks:
     gui_hint: ''
     label: LMST
     type: string
-    value: ra_funcs.cur_sidereal(longitude+pps).replace(",",":")
+    value: ra_funcs.cur_sidereal(longitude+tiktok).replace(",",":")
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 156.0]
+    coordinate: [768, 148.0]
     rotation: 0
     state: true
 - name: winpower
@@ -670,7 +672,7 @@ blocks:
     alias: ''
     comment: ''
     extension: '''.csv'''
-    filepat: '''tp-%04d%02d%02d'''
+    filepat: prefix+'tp-%04d%02d%02d'
     fmtstr: '''%11.9f'''
     formatter: None
     localtime: False if utc != 0 else True
@@ -1214,6 +1216,23 @@ blocks:
     coordinate: [952, 1468.0]
     rotation: 0
     state: true
+- name: prefix
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: File prefix
+    short_id: ''
+    type: str
+    value: '"./"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 804.0]
+    rotation: 0
+    state: true
 - name: qtgui_vector_sink_f_0
   id: qtgui_vector_sink_f
   parameters:
@@ -1630,7 +1649,7 @@ blocks:
     extension: '''.csv'''
     fftshift: 'False'
     fftsize: fftsize
-    filepat: '''fft-0-%04d%02d%02d'''
+    filepat: prefix+'fft-0-%04d%02d%02d'
     fmtstr: '''%6.2f'''
     formatter: None
     localtime: False if utc != 0 else True
