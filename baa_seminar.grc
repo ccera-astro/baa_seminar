@@ -309,7 +309,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 2580.0]
+    coordinate: [776, 2528.0]
     rotation: 0
     state: true
 - name: variable_qtgui_label_0_0
@@ -333,15 +333,15 @@ blocks:
   parameters:
     comment: ''
     formatter: None
-    gui_hint: 0,4
+    gui_hint: 0,3
     label: BAA SEMINAR
     type: string
-    value: SEPT. 18 2021
+    value: '"SEPT. 18 2021"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [984, 2584.0]
+    coordinate: [1000, 2528.0]
     rotation: 0
     state: true
 - name: winpower
@@ -1496,7 +1496,7 @@ blocks:
     nconnections: '1'
     ref_level: '0'
     showports: 'False'
-    update_time: 1.0/(data_rate*2.0)
+    update_time: 1.0/(data_rate)
     vlen: fftsize
     width1: '1'
     width10: '1'
