@@ -1773,8 +1773,8 @@ blocks:
       \ ltp.tm_mday) + self.extension, \"a\")\n                \n                #\n\
       \                # Write record header\n                #\n                fp.write\
       \ (\"%02d,%02d,%02d,\" % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))\n          \
-      \      fp.write (\"%s\" % ra_funcs.cur_sidereal(self.longitude))\n         \
-      \       \n                #\n                # Write each of the data items\
+      \      fp.write (\"%s,\" % ra_funcs.cur_sidereal(self.longitude))\n        \
+      \        \n                #\n                # Write each of the data items\
       \ in the input vector\n                #\n                \n               \
       \ #\n                # Check if they want us to  do an FFTSHIFT operation\n\
       \                #  (to  normalize the ordering of FFTW3 outputs)\n        \
@@ -1993,6 +1993,7 @@ connections:
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
 - [fft_vxx_0, '0', blocks_complex_to_mag_squared_1, '0']
 - [flipper, '0', qtgui_vector_sink_f_1, '0']
+- [flipper, '0', vectorlogger, '0']
 - [osmosdr_source_0, '0', virtual_sink_0, '0']
 - [osmosdr_source_0, '1', virtual_sink_0_0, '0']
 - [single_pole_iir_filter_xx_0, '0', blocks_multiply_const_xx_0, '0']
@@ -2002,7 +2003,6 @@ connections:
 - [virtual_source_0, '0', blocks_stream_to_vector_0, '0']
 - [virtual_source_0_0, '0', blocks_complex_to_mag_squared_0, '0']
 - [virtual_source_1, '0', flipper, '0']
-- [virtual_source_1, '0', vectorlogger, '0']
 - [virtual_source_2, '0', formatter, '0']
 - [virtual_source_2, '0', stripchart, '0']
 - [virtual_source_3, '0', blocks_null_sink_1, '0']

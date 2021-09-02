@@ -86,7 +86,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                 # Write record header
                 #
                 fp.write ("%02d,%02d,%02d," % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))
-                fp.write ("%s" % ra_funcs.cur_sidereal(self.longitude))
+                fp.write ("%s," % ra_funcs.cur_sidereal(self.longitude))
                 
                 #
                 # Write each of the data items in the input vector
