@@ -609,23 +609,6 @@ blocks:
     coordinate: [2336, 1332.0]
     rotation: 0
     state: true
-- name: blocks_null_sink_1
-  id: blocks_null_sink
-  parameters:
-    affinity: ''
-    alias: ''
-    bus_structure_sink: '[[0,],]'
-    comment: ''
-    num_inputs: '1'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [304, 1580.0]
-    rotation: 0
-    state: true
 - name: blocks_stream_to_vector_0
   id: blocks_stream_to_vector
   parameters:
@@ -655,7 +638,7 @@ blocks:
     label: Device string
     short_id: ''
     type: str
-    value: '"rtl=0 rtl=1"'
+    value: '"rtl=0"'
   states:
     bus_sink: false
     bus_source: false
@@ -1326,8 +1309,8 @@ blocks:
     iq_balance_mode9: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
-    nchan: '2'
-    num_mboards: '2'
+    nchan: '1'
+    num_mboards: '1'
     sample_rate: samp_rate
     sync: sync
     time_source0: ''
@@ -1849,19 +1832,6 @@ blocks:
     coordinate: [1248, 84.0]
     rotation: 0
     state: true
-- name: virtual_sink_0_0
-  id: virtual_sink
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: rf2
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1248, 324.0]
-    rotation: 0
-    state: true
 - name: virtual_sink_1
   id: virtual_sink
   parameters:
@@ -1940,19 +1910,6 @@ blocks:
     coordinate: [1824, 72.0]
     rotation: 0
     state: true
-- name: virtual_source_3
-  id: virtual_source
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: rf2
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [32, 1568.0]
-    rotation: 0
-    state: true
 - name: virtual_source_4
   id: virtual_source
   parameters:
@@ -1995,7 +1952,6 @@ connections:
 - [flipper, '0', qtgui_vector_sink_f_1, '0']
 - [flipper, '0', vectorlogger, '0']
 - [osmosdr_source_0, '0', virtual_sink_0, '0']
-- [osmosdr_source_0, '1', virtual_sink_0_0, '0']
 - [single_pole_iir_filter_xx_0, '0', blocks_multiply_const_xx_0, '0']
 - [single_pole_iir_filter_xx_0, '0', pacer_probe, '0']
 - [single_pole_iir_filter_xx_1, '0', blocks_keep_one_in_n_1, '0']
@@ -2005,7 +1961,6 @@ connections:
 - [virtual_source_1, '0', flipper, '0']
 - [virtual_source_2, '0', formatter, '0']
 - [virtual_source_2, '0', stripchart, '0']
-- [virtual_source_3, '0', blocks_null_sink_1, '0']
 - [virtual_source_4, '0', blocks_multiply_conjugate_cc_0, '0']
 - [virtual_source_4_0, '0', blocks_multiply_conjugate_cc_0, '1']
 
