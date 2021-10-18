@@ -1144,7 +1144,7 @@ blocks:
     label: Device string
     short_id: ''
     type: str
-    value: '"rtl=0 file=/dev/zero,rate=%d" % srate'
+    value: '"rtl=0 file=/dev/zero,rate=10e6"'
   states:
     bus_sink: false
     bus_source: false
