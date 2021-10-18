@@ -41,7 +41,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [496, 164.0]
+    coordinate: [248, 156.0]
     rotation: 0
     state: true
 - name: correct_baseline
@@ -109,7 +109,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 204.0]
+    coordinate: [128, 212.0]
     rotation: 0
     state: enabled
 - name: doplow
@@ -121,7 +121,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [192, 204.0]
+    coordinate: [128, 132.0]
     rotation: 0
     state: enabled
 - name: fftrate
@@ -161,7 +161,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [496, 244.0]
+    coordinate: [248, 220.0]
     rotation: 0
     state: true
 - name: freqlow
@@ -188,6 +188,18 @@ blocks:
     coordinate: [200, 592.0]
     rotation: 0
     state: enabled
+- name: gmt
+  id: variable
+  parameters:
+    comment: ''
+    value: time.gmtime()
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 3036.0]
+    rotation: 0
+    state: true
 - name: ibaseline
   id: variable_qtgui_entry
   parameters:
@@ -323,7 +335,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [336, 116.0]
+    coordinate: [24, 132.0]
     rotation: 0
     state: enabled
 - name: split_ratio
@@ -350,6 +362,18 @@ blocks:
     coordinate: [432, 2988.0]
     rotation: 0
     state: true
+- name: today
+  id: variable
+  parameters:
+    comment: ''
+    value: '"%04d-%02d-%02d" % (gmt.tm_year, gmt.tm_mon, gmt.tm_mday)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1008, 3036.0]
+    rotation: 0
+    state: true
 - name: tunereq
   id: variable
   parameters:
@@ -359,7 +383,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [496, 92.0]
+    coordinate: [248, 92.0]
     rotation: 0
     state: true
 - name: variable_qtgui_label_0
@@ -400,9 +424,9 @@ blocks:
     comment: ''
     formatter: None
     gui_hint: 0,3
-    label: BAA SEMINAR
+    label: title
     type: string
-    value: '"SEPT. 18 2021"'
+    value: today
   states:
     bus_sink: false
     bus_source: false
@@ -486,7 +510,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1200, 1092.0]
+    coordinate: [984, 980.0]
     rotation: 0
     state: true
 - name: baseline_compensate
@@ -1108,7 +1132,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1024, 1092.0]
+    coordinate: [816, 964.0]
     rotation: 0
     state: true
 - name: device
@@ -1120,12 +1144,12 @@ blocks:
     label: Device string
     short_id: ''
     type: str
-    value: '"rtl=0 file=/dev/zero,rate=10e6"'
+    value: '"rtl=0 file=/dev/zero,rate=%d" % srate'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 740.0]
+    coordinate: [648, 860.0]
     rotation: 0
     state: true
 - name: dmult
@@ -1142,7 +1166,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [552, 980.0]
+    coordinate: [384, 972.0]
     rotation: 0
     state: true
 - name: fft_vxx_0
@@ -1342,7 +1366,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1192, 700.0]
+    coordinate: [984, 668.0]
     rotation: 0
     state: true
 - name: import_0
@@ -1355,7 +1379,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [336, 20.0]
+    coordinate: [360, 12.0]
     rotation: 0
     state: true
 - name: import_0_0
@@ -1371,6 +1395,19 @@ blocks:
     coordinate: [496, 16.0]
     rotation: 0
     state: true
+- name: import_0_0_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import time
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [480, 92.0]
+    rotation: 0
+    state: true
 - name: import_0_1
   id: import
   parameters:
@@ -1381,7 +1418,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [208, 76.0]
+    coordinate: [192, 20.0]
     rotation: 0
     state: true
 - name: logtime
@@ -1398,7 +1435,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 844.0]
+    coordinate: [480, 852.0]
     rotation: 0
     state: true
 - name: longitude
@@ -1930,7 +1967,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 980.0]
+    coordinate: [544, 964.0]
     rotation: 0
     state: true
 - name: qtgui_number_sink_0
@@ -2229,7 +2266,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [984, 700.0]
+    coordinate: [824, 756.0]
     rotation: 0
     state: true
 - name: seconds
@@ -2246,7 +2283,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 996.0]
+    coordinate: [216, 980.0]
     rotation: 0
     state: true
 - name: single_pole_iir_filter_xx_0
@@ -2411,7 +2448,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1200, 844.0]
+    coordinate: [984, 772.0]
     rotation: 0
     state: true
 - name: srate
@@ -2423,7 +2460,7 @@ blocks:
     label: Sample Rate (SPS)
     short_id: ''
     type: eng_float
-    value: 6e6
+    value: 2.56e6
   states:
     bus_sink: false
     bus_source: false
@@ -2717,7 +2754,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1200, 980.0]
+    coordinate: [984, 876.0]
+    rotation: 0
+    state: true
+- name: title
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: '"Title"'
+    short_id: ''
+    type: str
+    value: '"BAA Seminar"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 748.0]
     rotation: 0
     state: true
 - name: utc
@@ -2734,7 +2788,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [968, 980.0]
+    coordinate: [824, 860.0]
     rotation: 0
     state: true
 - name: vectorlogger
@@ -2841,7 +2895,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [552, 1084.0]
+    coordinate: [664, 964.0]
     rotation: 0
     state: true
 - name: virtual_sink_0
