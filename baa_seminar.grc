@@ -496,6 +496,23 @@ blocks:
     coordinate: [224, 2764.0]
     rotation: 0
     state: true
+- name: antenna
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: '"Antenna Selection"'
+    short_id: ''
+    type: str
+    value: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1160, 988.0]
+    rotation: 0
+    state: true
 - name: baseline
   id: parameter
   parameters:
@@ -1604,8 +1621,8 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    ant0: ''
-    ant1: ''
+    ant0: antenna
+    ant1: antenna
     ant10: ''
     ant11: ''
     ant12: ''
