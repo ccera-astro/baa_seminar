@@ -1118,6 +1118,23 @@ blocks:
     coordinate: [944, 1960.0]
     rotation: 0
     state: true
+- name: bw
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: '"Analog Bandwidth"'
+    short_id: ''
+    type: eng_float
+    value: 5.0e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 740.0]
+    rotation: 0
+    state: true
 - name: declination
   id: parameter
   parameters:
@@ -1652,8 +1669,8 @@ blocks:
     bb_gain7: '20'
     bb_gain8: '20'
     bb_gain9: '20'
-    bw0: samp_rate*0.8
-    bw1: samp_rate*0.8
+    bw0: bw
+    bw1: bw
     bw10: '0'
     bw11: '0'
     bw12: '0'
