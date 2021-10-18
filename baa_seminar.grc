@@ -32,6 +32,18 @@ options:
     state: enabled
 
 blocks:
+- name: actual_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: ifreq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 164.0]
+    rotation: 0
+    state: true
 - name: correct_baseline
   id: variable_qtgui_check_box
   parameters:
@@ -46,7 +58,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [104, 2336.0]
+    coordinate: [64, 2764.0]
     rotation: 0
     state: true
 - name: data_rate
@@ -71,7 +83,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: Main@2:0,0
+    gui_hint: Main@3:0,0
     label: TP Multiplier
     min_len: '100'
     orient: Qt.Horizontal
@@ -85,7 +97,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [360, 2340.0]
+    coordinate: [368, 2764.0]
     rotation: 0
     state: true
 - name: dophigh
@@ -140,6 +152,18 @@ blocks:
     coordinate: [16, 388.0]
     rotation: 0
     state: enabled
+- name: fper
+  id: variable
+  parameters:
+    comment: ''
+    value: ra_funcs.fperiod(ifreq,ibaseline,idecln,0.0)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 244.0]
+    rotation: 0
+    state: true
 - name: freqlow
   id: variable
   parameters:
@@ -164,11 +188,41 @@ blocks:
     coordinate: [200, 592.0]
     rotation: 0
     state: enabled
+- name: ibaseline
+  id: variable_qtgui_entry
+  parameters:
+    comment: ''
+    gui_hint: Main@3:2,2
+    label: Baseline Length
+    type: real
+    value: baseline
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 3092.0]
+    rotation: 0
+    state: true
+- name: idecln
+  id: variable_qtgui_entry
+  parameters:
+    comment: ''
+    gui_hint: Main@3:2,1
+    label: Declination
+    type: real
+    value: declination
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1296, 2996.0]
+    rotation: 0
+    state: true
 - name: ifreq
   id: variable_qtgui_entry
   parameters:
     comment: ''
-    gui_hint: Main@2:1,0
+    gui_hint: Main@3:1,0
     label: Tuned Frequency
     type: real
     value: freq
@@ -176,14 +230,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1288, 2344.0]
+    coordinate: [1296, 2756.0]
     rotation: 0
     state: true
 - name: irfgain
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: Main@2:1,1
+    gui_hint: Main@3:1,1
     label: RF Gain
     min_len: '100'
     orient: Qt.Horizontal
@@ -197,14 +251,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1080, 2340.0]
+    coordinate: [1088, 2764.0]
     rotation: 0
     state: true
 - name: isinteg
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: Main@2:0,2
+    gui_hint: Main@3:0,2
     label: Spectral Integration Time
     min_len: '100'
     orient: Qt.Horizontal
@@ -218,14 +272,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 2340.0]
+    coordinate: [816, 2764.0]
     rotation: 0
     state: true
 - name: itinteg
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: Main@2:0,1
+    gui_hint: Main@3:0,1
     label: TP Integration Time
     min_len: '100'
     orient: Qt.Horizontal
@@ -239,7 +293,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [552, 2340.0]
+    coordinate: [560, 2764.0]
     rotation: 0
     state: true
 - name: pacer
@@ -257,7 +311,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 2572.0]
+    coordinate: [544, 2988.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -276,12 +330,12 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '20'
+    value: '100'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1080, 1572.0]
+    coordinate: [208, 508.0]
     rotation: 0
     state: true
 - name: tiktok
@@ -293,7 +347,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 2576.0]
+    coordinate: [432, 2988.0]
+    rotation: 0
+    state: true
+- name: tunereq
+  id: variable
+  parameters:
+    comment: ''
+    value: uhd.tune_request(ifreq,samp_rate*1.8)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 92.0]
     rotation: 0
     state: true
 - name: variable_qtgui_label_0
@@ -309,7 +375,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [776, 2528.0]
+    coordinate: [784, 2948.0]
     rotation: 0
     state: true
 - name: variable_qtgui_label_0_0
@@ -317,7 +383,7 @@ blocks:
   parameters:
     comment: ''
     formatter: None
-    gui_hint: Main@2:2,0
+    gui_hint: Main@3:2,0
     label: Logging to...
     type: string
     value: prefix
@@ -325,7 +391,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1288, 2472.0]
+    coordinate: [1296, 2884.0]
     rotation: 0
     state: true
 - name: variable_qtgui_label_0_1
@@ -341,7 +407,23 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1000, 2528.0]
+    coordinate: [1008, 2948.0]
+    rotation: 0
+    state: true
+- name: variable_qtgui_label_0_1_0
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: Main@3:2,4
+    label: Fringe Period
+    type: string
+    value: '"%5d secs" % fper'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 3092.0]
     rotation: 0
     state: true
 - name: winpower
@@ -374,20 +456,37 @@ blocks:
     label17: Tab 17
     label18: Tab 18
     label19: Tab 19
-    label2: Controls
-    label3: Tab 3
+    label2: Correlation
+    label3: Controls
     label4: Tab 4
     label5: Tab 5
     label6: Tab 6
     label7: Tab 7
     label8: Tab 8
     label9: Tab 9
-    num_tabs: '3'
+    num_tabs: '4'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [104, 2528.0]
+    coordinate: [224, 2764.0]
+    rotation: 0
+    state: true
+- name: baseline
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Interferometer Baseline (meters)
+    short_id: ''
+    type: eng_float
+    value: '4.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 1092.0]
     rotation: 0
     state: true
 - name: baseline_compensate
@@ -443,6 +542,58 @@ blocks:
     coordinate: [1968, 1340.0]
     rotation: 0
     state: true
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 1712.0]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_1
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: fftsize
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1424, 1344.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_float_0
+  id: blocks_complex_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1744, 208.0]
+    rotation: 0
+    state: true
 - name: blocks_complex_to_mag_squared_0
   id: blocks_complex_to_mag_squared
   parameters:
@@ -460,7 +611,27 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [336, 1756.0]
+    coordinate: [304, 1684.0]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_mag_squared_0_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'A detector
+
+      Computes
+
+      (I^2)+(Q^2)'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 1820.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_mag_squared_1
@@ -476,7 +647,23 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [960, 1368.0]
+    coordinate: [928, 1252.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_mag_squared_1_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Convert to power estimate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: fftsize
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [928, 1404.0]
     rotation: 0
     state: true
 - name: blocks_integrate_xx_0
@@ -494,7 +681,43 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [672, 1744.0]
+    coordinate: [648, 1716.0]
+    rotation: 0
+    state: true
+- name: blocks_integrate_xx_0_0
+  id: blocks_integrate_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: split_ratio
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [512, 2236.0]
+    rotation: 0
+    state: true
+- name: blocks_integrate_xx_0_1
+  id: blocks_integrate_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: split_ratio
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 1812.0]
     rotation: 0
     state: true
 - name: blocks_keep_one_in_n_0
@@ -517,6 +740,50 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1928, 1684.0]
+    rotation: 0
+    state: enabled
+- name: blocks_keep_one_in_n_0_0
+  id: blocks_keep_one_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'After filtering, we don''t need high
+
+      sample rates
+
+      reduce to ''data_rate'' Hz'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: int(int(samp_rate/data_rate)/split_ratio)
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1800, 2332.0]
+    rotation: 0
+    state: enabled
+- name: blocks_keep_one_in_n_0_1
+  id: blocks_keep_one_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'After filtering, we don''t need high
+
+      sample rates
+
+      reduce to ''data_rate'' Hz'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: int(int(samp_rate/data_rate)/split_ratio)
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1888, 1916.0]
     rotation: 0
     state: enabled
 - name: blocks_keep_one_in_n_1
@@ -553,6 +820,22 @@ blocks:
     coordinate: [360, 2092.0]
     rotation: 0
     state: disabled
+- name: blocks_multiply_conjugate_cc_1
+  id: blocks_multiply_conjugate_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 2248.0]
+    rotation: 0
+    state: true
 - name: blocks_multiply_const_vxx_0
   id: blocks_multiply_const_vxx
   parameters:
@@ -571,6 +854,42 @@ blocks:
     coordinate: [2288, 1676.0]
     rotation: 0
     state: true
+- name: blocks_multiply_const_vxx_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Apply the detector-multiplier
+    const: float(dc_gain*10)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2040, 2324.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_vxx_0_1
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Apply the detector-multiplier
+    const: float(dc_gain)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2288, 1924.0]
+    rotation: 0
+    state: true
 - name: blocks_multiply_const_xx_0
   id: blocks_multiply_const_xx
   parameters:
@@ -586,7 +905,79 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1288, 1696.0]
+    coordinate: [1344, 1700.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Integrator doesn't reduce
+    const: 1.0/split_ratio
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1528, 2324.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0_1
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Integrator doesn't reduce
+    const: 1.0/split_ratio
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1360, 1948.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_1
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: mulEast
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 60.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_1_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: mulWest
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1008, 292.0]
     rotation: 0
     state: true
 - name: blocks_nlog10_ff_0
@@ -609,6 +1000,24 @@ blocks:
     coordinate: [2336, 1332.0]
     rotation: 0
     state: true
+- name: blocks_patterned_interleaver_0
+  id: blocks_patterned_interleaver
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pattern: '[0,1,2,3]'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2176, 64.0]
+    rotation: 0
+    state: true
 - name: blocks_stream_to_vector_0
   id: blocks_stream_to_vector
   parameters:
@@ -626,7 +1035,80 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [272, 1396.0]
+    coordinate: [344, 1308.0]
+    rotation: 0
+    state: true
+- name: blocks_stream_to_vector_0_0
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'FFT requires fft-sized vectors
+
+      we do that here'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: fftsize
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 1420.0]
+    rotation: 0
+    state: true
+- name: blocks_sub_xx_0
+  id: blocks_sub_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1232, 2368.0]
+    rotation: 0
+    state: true
+- name: blocks_sub_xx_1
+  id: blocks_sub_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 1960.0]
+    rotation: 0
+    state: true
+- name: declination
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Object Declination
+    short_id: ''
+    type: eng_float
+    value: '45.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 1092.0]
     rotation: 0
     state: true
 - name: device
@@ -638,12 +1120,12 @@ blocks:
     label: Device string
     short_id: ''
     type: str
-    value: '"rtl=0"'
+    value: '"rtl=0 file=/dev/zero,rate=10e6"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [984, 836.0]
+    coordinate: [560, 740.0]
     rotation: 0
     state: true
 - name: dmult
@@ -681,7 +1163,28 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 1324.0]
+    coordinate: [632, 1220.0]
+    rotation: 0
+    state: true
+- name: fft_vxx_0_0
+  id: fft_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fft_size: fftsize
+    forward: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nthreads: '1'
+    shift: 'True'
+    type: complex
+    window: window.blackmanharris(fftsize)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 1388.0]
     rotation: 0
     state: true
 - name: flipper
@@ -727,7 +1230,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2048, 588.0]
+    coordinate: [2056, 780.0]
     rotation: 0
     state: true
 - name: formatter
@@ -807,7 +1310,7 @@ blocks:
     longitude: longitude
     maxoutbuf: '0'
     minoutbuf: '0'
-    nchan: '1'
+    nchan: '4'
   states:
     _io_cache: ('BAA:Data Logger', 'blk', [('formatter', 'None'), ('filepat', "'foonly-%d%d%d'"),
       ('extension', "'.csv'"), ('logtime', '10'), ('fmtstr', "'%11.9f'"), ('nchan',
@@ -868,6 +1371,19 @@ blocks:
     coordinate: [496, 16.0]
     rotation: 0
     state: true
+- name: import_0_1
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: from gnuradio import uhd
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 76.0]
+    rotation: 0
+    state: true
 - name: logtime
   id: parameter
   parameters:
@@ -899,7 +1415,41 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [144, 852.0]
+    coordinate: [208, 852.0]
+    rotation: 0
+    state: true
+- name: mulEast
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: A channel balance multiplier
+    short_id: ''
+    type: eng_float
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 860.0]
+    rotation: 0
+    state: true
+- name: mulWest
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: B channel balance multiplier
+    short_id: ''
+    type: eng_float
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 972.0]
     rotation: 0
     state: true
 - name: note_0
@@ -918,7 +1468,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 1212.0]
+    coordinate: [352, 1156.0]
     rotation: 0
     state: true
 - name: note_0_0
@@ -937,20 +1487,26 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 1572.0]
+    coordinate: [848, 1580.0]
     rotation: 0
     state: true
-- name: note_1
+- name: note_0_0_0
   id: note
   parameters:
     alias: ''
-    comment: Placeholder for 2nd channel
+    comment: 'The correlation sub-graph
+
+      Compute the conjugate product
+
+      Integrate
+
+      Decimate down to "data_rate"'
     note: ''
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 1452.0]
+    coordinate: [304, 2348.0]
     rotation: 0
     state: true
 - name: note_2
@@ -969,7 +1525,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [912, 1580.0]
+    coordinate: [1024, 1580.0]
+    rotation: 0
+    state: true
+- name: note_3
+  id: note
+  parameters:
+    alias: ''
+    comment: 'We implement a high-pass filter, cheaply
+
+      This allows us to remove any DC offset it
+
+      the correlation.'
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1008, 2196.0]
     rotation: 0
     state: true
 - name: osmosdr_source_0
@@ -1042,8 +1615,8 @@ blocks:
     bb_gain7: '20'
     bb_gain8: '20'
     bb_gain9: '20'
-    bw0: '0'
-    bw1: '0'
+    bw0: samp_rate*0.8
+    bw1: samp_rate*0.8
     bw10: '0'
     bw11: '0'
     bw12: '0'
@@ -1147,8 +1720,8 @@ blocks:
     dc_offset_mode7: '0'
     dc_offset_mode8: '0'
     dc_offset_mode9: '0'
-    freq0: ifreq
-    freq1: ifreq
+    freq0: actual_freq
+    freq1: actual_freq
     freq10: 100e6
     freq11: 100e6
     freq12: 100e6
@@ -1309,7 +1882,7 @@ blocks:
     iq_balance_mode9: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
-    nchan: '1'
+    nchan: '2'
     num_mboards: '1'
     sample_rate: samp_rate
     sync: sync
@@ -1360,6 +1933,69 @@ blocks:
     coordinate: [792, 980.0]
     rotation: 0
     state: true
+- name: qtgui_number_sink_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'False'
+    avg: '0'
+    color1: ("blue", "red")
+    color10: ("black", "black")
+    color2: ("blue", "red")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1.0'
+    factor10: '1'
+    factor2: '1.0'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_NONE
+    gui_hint: Main@3:0,4
+    label1: East Det.
+    label10: ''
+    label2: West Det.
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '0.01'
+    min: '0'
+    name: '"Detectors"'
+    nconnections: '2'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '2.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 1540.0]
+    rotation: 0
+    state: true
 - name: qtgui_vector_sink_f_0
   id: qtgui_vector_sink_f
   parameters:
@@ -1390,9 +2026,9 @@ blocks:
     comment: ''
     grid: 'True'
     gui_hint: Main@0:0,0,1,4
-    label1: Detector
+    label1: Detector (Sum)
     label10: ''
-    label2: ''
+    label2: Detector (Difference)
     label3: ''
     label4: ''
     label5: ''
@@ -1402,16 +2038,16 @@ blocks:
     label9: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: Total Power
-    nconnections: '1'
+    name: '"Total Power/Diff. Power"'
+    nconnections: '2'
     ref_level: '0'
     showports: 'True'
     update_time: '0.250'
     vlen: seconds
     width1: '2'
     width10: '1'
-    width2: '1'
-    width3: '1'
+    width2: '2'
+    width3: '2'
     width4: '1'
     width5: '1'
     width6: '1'
@@ -1430,7 +2066,80 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2520, 264.0]
+    coordinate: [2536, 228.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_vector_sink_f_0_0
+  id: qtgui_vector_sink_f
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'True'
+    gui_hint: Main@2:0,0,1,4
+    label1: COS
+    label10: ''
+    label2: SIN
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: Correlator Output
+    nconnections: '2'
+    ref_level: '0'
+    showports: 'True'
+    update_time: '0.250'
+    vlen: seconds
+    width1: '2'
+    width10: '1'
+    width2: '2'
+    width3: '2'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    x_axis_label: '"Time (Seconds)"'
+    x_start: '0'
+    x_step: '1'
+    x_units: Secs
+    y_axis_label: '"Cross Power"'
+    y_units: '""'
+    ymax: '1.0'
+    ymin: '-1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2528, 468.0]
     rotation: 0
     state: enabled
 - name: qtgui_vector_sink_f_1
@@ -1503,7 +2212,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2520, 544.0]
+    coordinate: [2520, 676.0]
     rotation: 0
     state: true
 - name: rfgain
@@ -1555,7 +2264,65 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [960, 1760.0]
+    coordinate: [1112, 1788.0]
+    rotation: 0
+    state: enabled
+- name: single_pole_iir_filter_xx_0_0
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: ra_funcs.getalpha(1.0/itinteg,samp_rate/split_ratio)
+    comment: A simple filter/integrator
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [768, 2252.0]
+    rotation: 0
+    state: enabled
+- name: single_pole_iir_filter_xx_0_0_0
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: ra_funcs.getalpha(1.0/(fper*1.25),samp_rate/split_ratio)
+    comment: 'A simple filter/integrator
+
+      The lower path helps us make
+
+      a high-pass filter'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [736, 2396.0]
+    rotation: 0
+    state: enabled
+- name: single_pole_iir_filter_xx_0_1
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: ra_funcs.getalpha(1.0/itinteg,samp_rate/split_ratio)
+    comment: A simple filter/integrator
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 1964.0]
     rotation: 0
     state: enabled
 - name: single_pole_iir_filter_xx_1
@@ -1573,7 +2340,61 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1296, 1356.0]
+    coordinate: [1192, 1244.0]
+    rotation: 0
+    state: true
+- name: single_pole_iir_filter_xx_1_0
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: ra_funcs.getalpha(1.0/isinteg,fftrate)
+    comment: Integrate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: fftsize
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1176, 1396.0]
+    rotation: 0
+    state: true
+- name: single_pole_iir_filter_xx_2
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: 1.0/samp_rate
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 1508.0]
+    rotation: 0
+    state: true
+- name: single_pole_iir_filter_xx_2_0
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: 1.0/samp_rate
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 1596.0]
     rotation: 0
     state: true
 - name: sinteg
@@ -1675,7 +2496,211 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2032, 316.0]
+    coordinate: [2160, 228.0]
+    rotation: 0
+    state: enabled
+- name: stripchart_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nimport time\n\n\nclass blk(gr.basic_block):  # other\
+      \ base classes are basic_block, decim_block, interp_block\n    \"\"\"A strip\
+      \ chart takes in a stream of floats and produces a 1 hour long\n       strip-chart\
+      \ as output\n       \n       Params:\n          decim - how much to decimate\
+      \ input to produce 1 SPS\n          seconds - how many seconds long is the stripchart\
+      \ vector\n    \"\"\"\n\n    def __init__(self, decim=100,seconds=3600):  # only\
+      \ default arguments here\n        \"\"\"arguments to this function show up as\
+      \ parameters in GRC\"\"\"\n        gr.basic_block.__init__(\n            self,\n\
+      \            name='BAA:Strip Chart',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \            out_sig=[(np.float32,seconds)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        \n        #\n        # How much do we need\
+      \ to average the input to produce a 1SPS\n        #  output?\n        #\n  \
+      \      self.decim = decim\n        \n        #\n        # The stripchart vector\
+      \ itself--must be persistent in the\n        #  object instance\n        #\n\
+      \        self.strip = [0.0]*seconds\n        \n        #\n        # keeps track\
+      \ of decimation\n        #\n        self.counter = 0\n        \n        #\n\
+      \        # We continuously average the input and store it here\n        #\n\
+      \        self.avg = 0.0\n\n    def general_work(self, input_items, output_items):\n\
+      \        \"\"\"take an input item(s), place appropriately in stripchart output\"\
+      \"\"\n \n        #\n        # Our averager hasn't been initialized with a\n\
+      \        #  \"prime the pump\" value?\n        # Do it now.\n        #\n   \
+      \     if (self.avg == 0.0):\n            self.avg = input_items[0][0]\n    \
+      \        self.counter = 0\n            #\n            # Also init the strip-chart\
+      \ to this level\n            #\n            self.strip = [self.avg]*len(self.strip)\n\
+      \        #\n        # For each of the input items\n        #\n        for x\
+      \ in range(len(input_items[0])):\n            #\n            # Effectively we\
+      \ get a N-point moving average\n            # WHere \"N\" is \"decim\"\n   \
+      \         #\n            self.avg += input_items[0][x]\n            self.counter\
+      \ += 1\n            \n            #\n            # Time to output an item into\
+      \ the stripchart\n            #\n            if (self.counter >= self.decim):\n\
+      \                \n                #\n                # Reduce by decim\n  \
+      \              #\n                self.avg /= self.counter\n               \
+      \ \n                #\n                # Use python array notation to effect\
+      \ a quick\n                #  shift of items in the stripchart array\n     \
+      \           #\n                self.strip = [self.avg] + self.strip[:-1]\n \
+      \               self.counter = 0\n                self.avg = 1.0e-15\n     \
+      \   #\n        # Stuff output items with the contents of the \n        #  possibly-updated\
+      \ stripchart\n        #\n        for y in range(len(output_items[0])):\n   \
+      \         output_items[0][y] = self.strip\n        \n        #\n        # Tell\
+      \ scheduler we consumed items\n        #\n        self.consume(0, len(input_items[0]))\n\
+      \        return len(output_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: Produces a "stripchart" type vector
+    decim: data_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    seconds: seconds
+  states:
+    _io_cache: ('BAA:Strip Chart', 'blk', [('decim', '100'), ('seconds', '3600')],
+      [('0', 'float', 1)], [('0', 'float', 3600)], 'A strip chart takes in a stream
+      of floats and produces a 1 hour long\n       strip-chart as output\n       \n       Params:\n          decim
+      - how much to decimate input to produce 1 SPS\n          seconds - how many
+      seconds long is the stripchart vector\n    ', ['decim'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2024, 428.0]
+    rotation: 0
+    state: enabled
+- name: stripchart_0_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nimport time\n\n\nclass blk(gr.basic_block):  # other\
+      \ base classes are basic_block, decim_block, interp_block\n    \"\"\"A strip\
+      \ chart takes in a stream of floats and produces a 1 hour long\n       strip-chart\
+      \ as output\n       \n       Params:\n          decim - how much to decimate\
+      \ input to produce 1 SPS\n          seconds - how many seconds long is the stripchart\
+      \ vector\n    \"\"\"\n\n    def __init__(self, decim=100,seconds=3600):  # only\
+      \ default arguments here\n        \"\"\"arguments to this function show up as\
+      \ parameters in GRC\"\"\"\n        gr.basic_block.__init__(\n            self,\n\
+      \            name='BAA:Strip Chart',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \            out_sig=[(np.float32,seconds)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        \n        #\n        # How much do we need\
+      \ to average the input to produce a 1SPS\n        #  output?\n        #\n  \
+      \      self.decim = decim\n        \n        #\n        # The stripchart vector\
+      \ itself--must be persistent in the\n        #  object instance\n        #\n\
+      \        self.strip = [0.0]*seconds\n        \n        #\n        # keeps track\
+      \ of decimation\n        #\n        self.counter = 0\n        \n        #\n\
+      \        # We continuously average the input and store it here\n        #\n\
+      \        self.avg = 0.0\n\n    def general_work(self, input_items, output_items):\n\
+      \        \"\"\"take an input item(s), place appropriately in stripchart output\"\
+      \"\"\n \n        #\n        # Our averager hasn't been initialized with a\n\
+      \        #  \"prime the pump\" value?\n        # Do it now.\n        #\n   \
+      \     if (self.avg == 0.0):\n            self.avg = input_items[0][0]\n    \
+      \        self.counter = 0\n            #\n            # Also init the strip-chart\
+      \ to this level\n            #\n            self.strip = [self.avg]*len(self.strip)\n\
+      \        #\n        # For each of the input items\n        #\n        for x\
+      \ in range(len(input_items[0])):\n            #\n            # Effectively we\
+      \ get a N-point moving average\n            # WHere \"N\" is \"decim\"\n   \
+      \         #\n            self.avg += input_items[0][x]\n            self.counter\
+      \ += 1\n            \n            #\n            # Time to output an item into\
+      \ the stripchart\n            #\n            if (self.counter >= self.decim):\n\
+      \                \n                #\n                # Reduce by decim\n  \
+      \              #\n                self.avg /= self.counter\n               \
+      \ \n                #\n                # Use python array notation to effect\
+      \ a quick\n                #  shift of items in the stripchart array\n     \
+      \           #\n                self.strip = [self.avg] + self.strip[:-1]\n \
+      \               self.counter = 0\n                self.avg = 1.0e-15\n     \
+      \   #\n        # Stuff output items with the contents of the \n        #  possibly-updated\
+      \ stripchart\n        #\n        for y in range(len(output_items[0])):\n   \
+      \         output_items[0][y] = self.strip\n        \n        #\n        # Tell\
+      \ scheduler we consumed items\n        #\n        self.consume(0, len(input_items[0]))\n\
+      \        return len(output_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: Produces a "stripchart" type vector
+    decim: data_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    seconds: seconds
+  states:
+    _io_cache: ('BAA:Strip Chart', 'blk', [('decim', '100'), ('seconds', '3600')],
+      [('0', 'float', 1)], [('0', 'float', 3600)], 'A strip chart takes in a stream
+      of floats and produces a 1 hour long\n       strip-chart as output\n       \n       Params:\n          decim
+      - how much to decimate input to produce 1 SPS\n          seconds - how many
+      seconds long is the stripchart vector\n    ', ['decim'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2024, 524.0]
+    rotation: 0
+    state: enabled
+- name: stripchart_1
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nimport time\n\n\nclass blk(gr.basic_block):  # other\
+      \ base classes are basic_block, decim_block, interp_block\n    \"\"\"A strip\
+      \ chart takes in a stream of floats and produces a 1 hour long\n       strip-chart\
+      \ as output\n       \n       Params:\n          decim - how much to decimate\
+      \ input to produce 1 SPS\n          seconds - how many seconds long is the stripchart\
+      \ vector\n    \"\"\"\n\n    def __init__(self, decim=100,seconds=3600):  # only\
+      \ default arguments here\n        \"\"\"arguments to this function show up as\
+      \ parameters in GRC\"\"\"\n        gr.basic_block.__init__(\n            self,\n\
+      \            name='BAA:Strip Chart',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \            out_sig=[(np.float32,seconds)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        \n        #\n        # How much do we need\
+      \ to average the input to produce a 1SPS\n        #  output?\n        #\n  \
+      \      self.decim = decim\n        \n        #\n        # The stripchart vector\
+      \ itself--must be persistent in the\n        #  object instance\n        #\n\
+      \        self.strip = [0.0]*seconds\n        \n        #\n        # keeps track\
+      \ of decimation\n        #\n        self.counter = 0\n        \n        #\n\
+      \        # We continuously average the input and store it here\n        #\n\
+      \        self.avg = 0.0\n\n    def general_work(self, input_items, output_items):\n\
+      \        \"\"\"take an input item(s), place appropriately in stripchart output\"\
+      \"\"\n \n        #\n        # Our averager hasn't been initialized with a\n\
+      \        #  \"prime the pump\" value?\n        # Do it now.\n        #\n   \
+      \     if (self.avg == 0.0):\n            self.avg = input_items[0][0]\n    \
+      \        self.counter = 0\n            #\n            # Also init the strip-chart\
+      \ to this level\n            #\n            self.strip = [self.avg]*len(self.strip)\n\
+      \        #\n        # For each of the input items\n        #\n        for x\
+      \ in range(len(input_items[0])):\n            #\n            # Effectively we\
+      \ get a N-point moving average\n            # WHere \"N\" is \"decim\"\n   \
+      \         #\n            self.avg += input_items[0][x]\n            self.counter\
+      \ += 1\n            \n            #\n            # Time to output an item into\
+      \ the stripchart\n            #\n            if (self.counter >= self.decim):\n\
+      \                \n                #\n                # Reduce by decim\n  \
+      \              #\n                self.avg /= self.counter\n               \
+      \ \n                #\n                # Use python array notation to effect\
+      \ a quick\n                #  shift of items in the stripchart array\n     \
+      \           #\n                self.strip = [self.avg] + self.strip[:-1]\n \
+      \               self.counter = 0\n                self.avg = 1.0e-15\n     \
+      \   #\n        # Stuff output items with the contents of the \n        #  possibly-updated\
+      \ stripchart\n        #\n        for y in range(len(output_items[0])):\n   \
+      \         output_items[0][y] = self.strip\n        \n        #\n        # Tell\
+      \ scheduler we consumed items\n        #\n        self.consume(0, len(input_items[0]))\n\
+      \        return len(output_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: Produces a "stripchart" type vector
+    decim: data_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    seconds: seconds
+  states:
+    _io_cache: ('BAA:Strip Chart', 'blk', [('decim', '100'), ('seconds', '3600')],
+      [('0', 'float', 1)], [('0', 'float', 3600)], 'A strip chart takes in a stream
+      of floats and produces a 1 hour long\n       strip-chart as output\n       \n       Params:\n          decim
+      - how much to decimate input to produce 1 SPS\n          seconds - how many
+      seconds long is the stripchart vector\n    ', ['decim'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2160, 332.0]
     rotation: 0
     state: enabled
 - name: tinteg
@@ -1799,7 +2824,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2520, 824.0]
+    coordinate: [2520, 900.0]
     rotation: 0
     state: enabled
 - name: velocity
@@ -1816,7 +2841,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 996.0]
+    coordinate: [552, 1084.0]
     rotation: 0
     state: true
 - name: virtual_sink_0
@@ -1830,6 +2855,19 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1248, 84.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_0_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rf2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1240, 228.0]
     rotation: 0
     state: true
 - name: virtual_sink_1
@@ -1858,6 +2896,32 @@ blocks:
     coordinate: [2640, 1676.0]
     rotation: 0
     state: true
+- name: virtual_sink_2_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: corr_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2296, 2324.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_2_1
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: diff_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2632, 1924.0]
+    rotation: 0
+    state: true
 - name: virtual_source_0
   id: virtual_source
   parameters:
@@ -1884,6 +2948,58 @@ blocks:
     coordinate: [32, 1676.0]
     rotation: 0
     state: true
+- name: virtual_source_0_0_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rf1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [-16, 2124.0]
+    rotation: 0
+    state: true
+- name: virtual_source_0_0_0_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rf2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [-32, 2204.0]
+    rotation: 0
+    state: true
+- name: virtual_source_0_0_1
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rf2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 1772.0]
+    rotation: 0
+    state: true
+- name: virtual_source_0_1
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rf2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [88, 1396.0]
+    rotation: 0
+    state: true
 - name: virtual_source_1
   id: virtual_source
   parameters:
@@ -1894,7 +3010,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1776, 736.0]
+    coordinate: [1808, 788.0]
     rotation: 0
     state: true
 - name: virtual_source_2
@@ -1907,7 +3023,33 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1824, 72.0]
+    coordinate: [1824, 44.0]
+    rotation: 0
+    state: true
+- name: virtual_source_2_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: diff_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1808, 124.0]
+    rotation: 0
+    state: true
+- name: virtual_source_3
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: corr_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1536, 212.0]
     rotation: 0
     state: true
 - name: virtual_source_4
@@ -1939,28 +3081,74 @@ blocks:
 
 connections:
 - [baseline_compensate, '0', blocks_nlog10_ff_0, '0']
+- [blocks_add_xx_0, '0', single_pole_iir_filter_xx_0, '0']
+- [blocks_add_xx_1, '0', blocks_keep_one_in_n_1, '0']
+- [blocks_complex_to_float_0, '0', blocks_patterned_interleaver_0, '1']
+- [blocks_complex_to_float_0, '0', stripchart_0, '0']
+- [blocks_complex_to_float_0, '1', blocks_patterned_interleaver_0, '2']
+- [blocks_complex_to_float_0, '1', stripchart_0_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', blocks_integrate_xx_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', single_pole_iir_filter_xx_2, '0']
+- [blocks_complex_to_mag_squared_0_0, '0', blocks_integrate_xx_0_1, '0']
+- [blocks_complex_to_mag_squared_0_0, '0', single_pole_iir_filter_xx_2_0, '0']
 - [blocks_complex_to_mag_squared_1, '0', single_pole_iir_filter_xx_1, '0']
-- [blocks_integrate_xx_0, '0', single_pole_iir_filter_xx_0, '0']
+- [blocks_complex_to_mag_squared_1_0, '0', single_pole_iir_filter_xx_1_0, '0']
+- [blocks_integrate_xx_0, '0', blocks_add_xx_0, '0']
+- [blocks_integrate_xx_0, '0', blocks_sub_xx_1, '0']
+- [blocks_integrate_xx_0_0, '0', single_pole_iir_filter_xx_0_0, '0']
+- [blocks_integrate_xx_0_0, '0', single_pole_iir_filter_xx_0_0_0, '0']
+- [blocks_integrate_xx_0_1, '0', blocks_add_xx_0, '1']
+- [blocks_integrate_xx_0_1, '0', blocks_sub_xx_1, '1']
 - [blocks_keep_one_in_n_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_keep_one_in_n_0_0, '0', blocks_multiply_const_vxx_0_0, '0']
+- [blocks_keep_one_in_n_0_1, '0', blocks_multiply_const_vxx_0_1, '0']
 - [blocks_keep_one_in_n_1, '0', baseline_compensate, '0']
+- [blocks_multiply_conjugate_cc_1, '0', blocks_integrate_xx_0_0, '0']
 - [blocks_multiply_const_vxx_0, '0', virtual_sink_2, '0']
+- [blocks_multiply_const_vxx_0_0, '0', virtual_sink_2_0, '0']
+- [blocks_multiply_const_vxx_0_1, '0', virtual_sink_2_1, '0']
 - [blocks_multiply_const_xx_0, '0', blocks_keep_one_in_n_0, '0']
+- [blocks_multiply_const_xx_0_0, '0', blocks_keep_one_in_n_0_0, '0']
+- [blocks_multiply_const_xx_0_1, '0', blocks_keep_one_in_n_0_1, '0']
+- [blocks_multiply_const_xx_1, '0', virtual_sink_0, '0']
+- [blocks_multiply_const_xx_1_0, '0', virtual_sink_0_0, '0']
 - [blocks_nlog10_ff_0, '0', virtual_sink_1, '0']
+- [blocks_patterned_interleaver_0, '0', formatter, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
+- [blocks_stream_to_vector_0_0, '0', fft_vxx_0_0, '0']
+- [blocks_sub_xx_0, '0', blocks_multiply_const_xx_0_0, '0']
+- [blocks_sub_xx_1, '0', single_pole_iir_filter_xx_0_1, '0']
 - [fft_vxx_0, '0', blocks_complex_to_mag_squared_1, '0']
+- [fft_vxx_0_0, '0', blocks_complex_to_mag_squared_1_0, '0']
 - [flipper, '0', qtgui_vector_sink_f_1, '0']
 - [flipper, '0', vectorlogger, '0']
-- [osmosdr_source_0, '0', virtual_sink_0, '0']
+- [osmosdr_source_0, '0', blocks_multiply_const_xx_1, '0']
+- [osmosdr_source_0, '1', blocks_multiply_const_xx_1_0, '0']
 - [single_pole_iir_filter_xx_0, '0', blocks_multiply_const_xx_0, '0']
 - [single_pole_iir_filter_xx_0, '0', pacer_probe, '0']
-- [single_pole_iir_filter_xx_1, '0', blocks_keep_one_in_n_1, '0']
+- [single_pole_iir_filter_xx_0_0, '0', blocks_sub_xx_0, '0']
+- [single_pole_iir_filter_xx_0_0_0, '0', blocks_sub_xx_0, '1']
+- [single_pole_iir_filter_xx_0_1, '0', blocks_multiply_const_xx_0_1, '0']
+- [single_pole_iir_filter_xx_1, '0', blocks_add_xx_1, '0']
+- [single_pole_iir_filter_xx_1_0, '0', blocks_add_xx_1, '1']
+- [single_pole_iir_filter_xx_2, '0', qtgui_number_sink_0, '0']
+- [single_pole_iir_filter_xx_2_0, '0', qtgui_number_sink_0, '1']
 - [stripchart, '0', qtgui_vector_sink_f_0, '0']
+- [stripchart_0, '0', qtgui_vector_sink_f_0_0, '0']
+- [stripchart_0_0, '0', qtgui_vector_sink_f_0_0, '1']
+- [stripchart_1, '0', qtgui_vector_sink_f_0, '1']
 - [virtual_source_0, '0', blocks_stream_to_vector_0, '0']
 - [virtual_source_0_0, '0', blocks_complex_to_mag_squared_0, '0']
+- [virtual_source_0_0_0, '0', blocks_multiply_conjugate_cc_1, '0']
+- [virtual_source_0_0_0_0, '0', blocks_multiply_conjugate_cc_1, '1']
+- [virtual_source_0_0_1, '0', blocks_complex_to_mag_squared_0_0, '0']
+- [virtual_source_0_1, '0', blocks_stream_to_vector_0_0, '0']
 - [virtual_source_1, '0', flipper, '0']
-- [virtual_source_2, '0', formatter, '0']
+- [virtual_source_2, '0', blocks_patterned_interleaver_0, '0']
 - [virtual_source_2, '0', stripchart, '0']
+- [virtual_source_2_0, '0', blocks_patterned_interleaver_0, '3']
+- [virtual_source_2_0, '0', stripchart_1, '0']
+- [virtual_source_3, '0', blocks_complex_to_float_0, '0']
 - [virtual_source_4, '0', blocks_multiply_conjugate_cc_0, '0']
 - [virtual_source_4_0, '0', blocks_multiply_conjugate_cc_0, '1']
 
