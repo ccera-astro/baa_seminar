@@ -646,7 +646,7 @@ blocks:
       We want to add a little bit so that
 
       log10 doesn''t throw exceptions'
-    const: '[1.0e-140]*fftsize'
+    const: '[1.0e-14]*fftsize'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
