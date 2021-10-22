@@ -25,7 +25,8 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                 
                 
 
-    def __init__(self, formatter=None, filepat="foonly-%d%d%d", extension=".csv", logtime=10,fmtstr="%11.9f",nchan=1,localtime=False,longitude=-76.03):  # only default arguments here
+    def __init__(self, formatter=None, filepat="foonly-%d%d%d", extension=".csv", 
+        logtime=10,fmtstr="%11.9f",nchan=1,localtime=False,longitude=-76.03, legend=None):  # only default arguments here
         """arguments to this function show up as parameters in GRC"""
         gr.sync_block.__init__(
             self,
@@ -94,6 +95,10 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         self.now = time.time()
         
         self.longitude = longitude
+        
+        self.legend = legend
+        
+        self.legcount = 0
 
     def work(self, input_items, output_items):
         
@@ -136,7 +141,13 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                     if (x < self.nchan-1):
                         fp.write(",")
                 fp.write("\n")
+                self.legcount += 1
+                if (self.legcount >= 30 and self.legend != None):
+                    self.legcount = 0
+                    fp.write("INFO:%s\n" % self.legend)
+                    
                 fp.close()
+  
             else:
                 self.formatter(self.filepat,self.extension,self.avg[0],self.avg[1])
             

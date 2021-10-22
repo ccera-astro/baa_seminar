@@ -415,7 +415,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1296, 2884.0]
+    coordinate: [1296, 2860.0]
     rotation: 0
     state: true
 - name: variable_qtgui_label_0_1
@@ -1457,18 +1457,19 @@ blocks:
       \ - formatter for data values -- most provide converters for both values\n \
       \               nchan - number of interleaved channels on input\"\"\"\n    \
       \            \n                \n\n    def __init__(self, formatter=None, filepat=\"\
-      foonly-%d%d%d\", extension=\".csv\", logtime=10,fmtstr=\"%11.9f\",nchan=1,localtime=False,longitude=-76.03):\
-      \  # only default arguments here\n        \"\"\"arguments to this function show\
-      \ up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n         \
-      \   self,\n            name='BAA:Data Logger',   # will show up in GRC\n   \
-      \         in_sig=[np.float32],\n            out_sig=None\n        )\n      \
-      \  # if an attribute with the same name as a parameter is found,\n        #\
-      \ a callback is registered (properties work, too).\n        \n        #\n  \
-      \      # Formatter is a function pointer--very often 'None'\n        #\n   \
-      \     self.formatter = formatter\n        \n        #\n        # Controls the\
-      \ template for filename generation\n        #\n        self.filepat= filepat\n\
-      \        \n        #\n        # The filename extension\n        #\n        self.extension=extension\n\
-      \        \n        #\n        # The logging interval\n        #\n        self.logtime=logtime\n\
+      foonly-%d%d%d\", extension=\".csv\", \n        logtime=10,fmtstr=\"%11.9f\"\
+      ,nchan=1,localtime=False,longitude=-76.03, legend=None):  # only default arguments\
+      \ here\n        \"\"\"arguments to this function show up as parameters in GRC\"\
+      \"\"\n        gr.sync_block.__init__(\n            self,\n            name='BAA:Data\
+      \ Logger',   # will show up in GRC\n            in_sig=[np.float32],\n     \
+      \       out_sig=None\n        )\n        # if an attribute with the same name\
+      \ as a parameter is found,\n        # a callback is registered (properties work,\
+      \ too).\n        \n        #\n        # Formatter is a function pointer--very\
+      \ often 'None'\n        #\n        self.formatter = formatter\n        \n  \
+      \      #\n        # Controls the template for filename generation\n        #\n\
+      \        self.filepat= filepat\n        \n        #\n        # The filename\
+      \ extension\n        #\n        self.extension=extension\n        \n       \
+      \ #\n        # The logging interval\n        #\n        self.logtime=logtime\n\
       \        \n        \n        #\n        # The data-item formatting string\n\
       \        #      \n        self.fmtstr = fmtstr\n        \n        #\n      \
       \  # How many (interleaved) channels\n        self.nchan = nchan\n        \n\
@@ -1480,8 +1481,9 @@ blocks:
       \     \n        \n        #\n        # This isn't strictly required, since the\
       \ work function code\n        #  will take care of whatever items it gets presented\
       \ with.\n        #\n        self.set_output_multiple(nchan)\n        \n    \
-      \    self.now = time.time()\n        \n        self.longitude = longitude\n\n\
-      \    def work(self, input_items, output_items):\n        \n        if (self.localtime\
+      \    self.now = time.time()\n        \n        self.longitude = longitude\n\
+      \        \n        self.legend = legend\n        \n        self.legcount = 0\n\
+      \n    def work(self, input_items, output_items):\n        \n        if (self.localtime\
       \ == False):\n            ltp = time.gmtime()\n        else:\n            ltp\
       \ = time.localtime()\n        \n        #\n        # Distribute the input items\
       \ over the averaging buffer as appropriate\n        #  We assume that the input\
@@ -1503,7 +1505,10 @@ blocks:
       \ /= self.acnt[x]\n                    self.acnt[x] = 1\n                  \
       \  fp.write (self.fmtstr  % (self.avg[x]))\n                    if (x < self.nchan-1):\n\
       \                        fp.write(\",\")\n                fp.write(\"\\n\")\n\
-      \                fp.close()\n            else:\n                self.formatter(self.filepat,self.extension,self.avg[0],self.avg[1])\n\
+      \                self.legcount += 1\n                if (self.legcount >= 30\
+      \ and self.legend != None):\n                    self.legcount = 0\n       \
+      \             fp.write(\"INFO:%s\\n\" % self.legend)\n                    \n\
+      \                fp.close()\n  \n            else:\n                self.formatter(self.filepat,self.extension,self.avg[0],self.avg[1])\n\
       \            \n        return len(input_items[0])\n"
     affinity: ''
     alias: ''
@@ -1512,6 +1517,8 @@ blocks:
     filepat: prefix+'tp-%04d%02d%02d'
     fmtstr: '''%11.9f'''
     formatter: None
+    legend: '"Sum,Corr(R),Corr(I),Diff,East,West,DEC=%f,FREQ=%f,BW=%f" % (declination,
+      ifreq/1.0e6, srate/1.0e6)'
     localtime: False if utc != 0 else True
     logtime: logtime
     longitude: longitude
@@ -1521,14 +1528,15 @@ blocks:
   states:
     _io_cache: ('BAA:Data Logger', 'blk', [('formatter', 'None'), ('filepat', "'foonly-%d%d%d'"),
       ('extension', "'.csv'"), ('logtime', '10'), ('fmtstr', "'%11.9f'"), ('nchan',
-      '1'), ('localtime', 'False'), ('longitude', '-76.03')], [('0', 'float', 1)],
-      [], 'A slow data textual formatter\n          inputs are expected to be science-data\n             Parameters:\n                formatter
+      '1'), ('localtime', 'False'), ('longitude', '-76.03'), ('legend', 'None')],
+      [('0', 'float', 1)], [], 'A slow data textual formatter\n          inputs are
+      expected to be science-data\n             Parameters:\n                formatter
       - pointer to a custom formatter function\n                filepat - pattern
       used for formatting filename must provide converters for YYYY MM DD\n                extension
       - filename extension\n                logtime - how often to log, in seconds\n                fmtstr
       - formatter for data values -- most provide converters for both values\n                nchan
       - number of interleaved channels on input', ['extension', 'filepat', 'fmtstr',
-      'formatter', 'localtime', 'logtime', 'longitude', 'nchan'])
+      'formatter', 'legend', 'localtime', 'logtime', 'longitude', 'nchan'])
     bus_sink: false
     bus_source: false
     bus_structure: null
