@@ -646,7 +646,7 @@ blocks:
       We want to add a little bit so that
 
       log10 doesn''t throw exceptions'
-    const: '[1.0e-14]*fftsize'
+    const: '[1.0e-14]*fftsize if "file=" in device else [0.0]*fftsize'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -2208,7 +2208,7 @@ blocks:
     color10: '"dark blue"'
     color2: '"red"'
     color3: '"green"'
-    color4: '"black"'
+    color4: '"magenta"'
     color5: '"cyan"'
     color6: '"magenta"'
     color7: '"yellow"'
@@ -2239,7 +2239,7 @@ blocks:
     width10: '1'
     width2: '2'
     width3: '2'
-    width4: '1'
+    width4: '2'
     width5: '1'
     width6: '1'
     width7: '1'
