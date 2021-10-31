@@ -2591,8 +2591,12 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    alpha: 0.05*ra_funcs.getalpha(1.0/itinteg,samp_rate/split_ratio)
-    comment: A simple filter/integrator
+    alpha: ra_funcs.getalpha(1.0/(fper*1.25),samp_rate/split_ratio)
+    comment: 'A simple filter/integrator
+
+      Bottom half of high-pass
+
+      Assume 15-minute corner for now'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
