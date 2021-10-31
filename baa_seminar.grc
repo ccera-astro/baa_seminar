@@ -245,6 +245,23 @@ blocks:
     coordinate: [1296, 2756.0]
     rotation: 0
     state: true
+- name: ihighpass
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': '0'
+    gui_hint: Main@3:0,3
+    label: Enable differential high pass
+    'true': '1'
+    type: int
+    value: highpass
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [920, 2764.0]
+    rotation: 0
+    state: true
 - name: irfgain
   id: variable_qtgui_range
   parameters:
@@ -284,7 +301,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [816, 2764.0]
+    coordinate: [744, 2764.0]
     rotation: 0
     state: true
 - name: itinteg
@@ -1110,7 +1127,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: highpass
+    const: ihighpass
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
