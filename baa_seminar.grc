@@ -881,7 +881,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1928, 1884.0]
+    coordinate: [2088, 1852.0]
     rotation: 0
     state: enabled
 - name: blocks_keep_one_in_n_0_2
@@ -1104,6 +1104,24 @@ blocks:
     coordinate: [1008, 292.0]
     rotation: 0
     state: true
+- name: blocks_multiply_const_xx_2
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: highpass
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1760, 2044.0]
+    rotation: 0
+    state: true
 - name: blocks_nlog10_ff_0
   id: blocks_nlog10_ff
   parameters:
@@ -1236,6 +1254,24 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1440, 1840.0]
+    rotation: 0
+    state: true
+- name: blocks_sub_xx_1_0
+  id: blocks_sub_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: HP subtractor
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1904, 1856.0]
     rotation: 0
     state: true
 - name: bw
@@ -1560,6 +1596,23 @@ blocks:
     coordinate: [984, 668.0]
     rotation: 0
     state: true
+- name: highpass
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: HIgh pass for differential pathway
+    short_id: ''
+    type: intx
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 644.0]
+    rotation: 0
+    state: true
 - name: import_0
   id: import
   parameters:
@@ -1799,6 +1852,23 @@ blocks:
     coordinate: [1016, 2196.0]
     rotation: 0
     state: true
+- name: note_4
+  id: note
+  parameters:
+    alias: ''
+    comment: 'A simple high-pass for the differential
+
+      pathway--if using differential interferometry,
+
+      a high pass can help with DC gain drift.'
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1984, 1972.0]
+    rotation: 0
+    state: true
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:
@@ -1837,8 +1907,8 @@ blocks:
     ant8: ''
     ant9: ''
     args: device
-    bb_gain0: '20'
-    bb_gain1: '20'
+    bb_gain0: '0'
+    bb_gain1: '0'
     bb_gain10: '20'
     bb_gain11: '20'
     bb_gain12: '20'
@@ -1869,8 +1939,8 @@ blocks:
     bb_gain7: '20'
     bb_gain8: '20'
     bb_gain9: '20'
-    bw0: (samp_rate*0.8) if bw == 0 else bw
-    bw1: (samp_rate*0.8) if bw == 0 else bw
+    bw0: int((samp_rate*0.8)) if bw == 0 else int(bw)
+    bw1: int((samp_rate*0.8)) if bw == 0 else int( bw)
     bw10: '0'
     bw11: '0'
     bw12: '0'
@@ -1942,8 +2012,8 @@ blocks:
     corr7: '0'
     corr8: '0'
     corr9: '0'
-    dc_offset_mode0: '2'
-    dc_offset_mode1: '2'
+    dc_offset_mode0: '0'
+    dc_offset_mode1: '0'
     dc_offset_mode10: '0'
     dc_offset_mode11: '0'
     dc_offset_mode12: '0'
@@ -2070,8 +2140,8 @@ blocks:
     gain_mode7: 'False'
     gain_mode8: 'False'
     gain_mode9: 'False'
-    if_gain0: '20'
-    if_gain1: '20'
+    if_gain0: '0'
+    if_gain1: '0'
     if_gain10: '20'
     if_gain11: '20'
     if_gain12: '20'
@@ -2514,6 +2584,24 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1048, 1828.0]
+    rotation: 0
+    state: enabled
+- name: single_pole_iir_filter_xx_0_1_0
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: 0.05*ra_funcs.getalpha(1.0/itinteg,samp_rate/split_ratio)
+    comment: A simple filter/integrator
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1528, 2036.0]
     rotation: 0
     state: enabled
 - name: single_pole_iir_filter_xx_1
@@ -3356,7 +3444,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1456, 1972.0]
+    coordinate: [1304, 1996.0]
     rotation: 0
     state: true
 - name: virtual_source_0
@@ -3589,13 +3677,16 @@ connections:
 - [blocks_multiply_const_xx_0_1, '0', single_pole_iir_filter_xx_0_1, '0']
 - [blocks_multiply_const_xx_1, '0', virtual_sink_0, '0']
 - [blocks_multiply_const_xx_1_0, '0', virtual_sink_0_0, '0']
+- [blocks_multiply_const_xx_2, '0', blocks_sub_xx_1_0, '1']
 - [blocks_nlog10_ff_0, '0', virtual_sink_1, '0']
 - [blocks_nlog10_ff_0_0, '0', virtual_sink_1_0, '0']
 - [blocks_patterned_interleaver_0, '0', formatter, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
 - [blocks_stream_to_vector_0_0, '0', fft_vxx_0_0, '0']
 - [blocks_sub_xx_0, '0', blocks_multiply_const_xx_0_0, '0']
-- [blocks_sub_xx_1, '0', blocks_keep_one_in_n_0_1, '0']
+- [blocks_sub_xx_1, '0', blocks_sub_xx_1_0, '0']
+- [blocks_sub_xx_1, '0', single_pole_iir_filter_xx_0_1_0, '0']
+- [blocks_sub_xx_1_0, '0', blocks_keep_one_in_n_0_1, '0']
 - [fft_vxx_0, '0', blocks_complex_to_mag_squared_1, '0']
 - [fft_vxx_0_0, '0', blocks_complex_to_mag_squared_1_0, '0']
 - [flipper, '0', qtgui_vector_sink_f_1, '0']
@@ -3612,6 +3703,7 @@ connections:
 - [single_pole_iir_filter_xx_0_1, '0', blocks_add_xx_0, '1']
 - [single_pole_iir_filter_xx_0_1, '0', blocks_sub_xx_1, '1']
 - [single_pole_iir_filter_xx_0_1, '0', virtual_sink_3_0, '0']
+- [single_pole_iir_filter_xx_0_1_0, '0', blocks_multiply_const_xx_2, '0']
 - [single_pole_iir_filter_xx_1, '0', blocks_keep_one_in_n_1, '0']
 - [single_pole_iir_filter_xx_1_0, '0', blocks_keep_one_in_n_1_0, '0']
 - [stripchart, '0', qtgui_vector_sink_f_0, '0']
