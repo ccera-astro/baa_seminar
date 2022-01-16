@@ -155,13 +155,15 @@ blocks:
 - name: fper
   id: variable
   parameters:
-    comment: ''
+    comment: 'Compute fringe period from baseline length
+
+      center frequency and declination'
     value: ra_funcs.fperiod(ifreq,ibaseline,idecln,0.0)
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 220.0]
+    coordinate: [736, 2516.0]
     rotation: 0
     state: true
 - name: freqlow
@@ -198,6 +200,48 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [832, 3036.0]
+    rotation: 0
+    state: true
+- name: iangEast
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: Main@3:4,0,1,2
+    label: Phase Correction East
+    min_len: '400'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '-180.0'
+    step: '2.0'
+    stop: '180.0'
+    value: angleEast
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1104, 3188.0]
+    rotation: 0
+    state: true
+- name: iangWest
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: Main@3:4,2,1,2
+    label: Phase Correction West
+    min_len: '400'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '-180.0'
+    step: '2.0'
+    stop: '180.0'
+    value: angleWest
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1280, 3188.0]
     rotation: 0
     state: true
 - name: ibaseline
@@ -260,6 +304,48 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [920, 2764.0]
+    rotation: 0
+    state: true
+- name: imulEast
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: Main@3:5,0
+    label: Gain Correction East
+    min_len: '100'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0.1'
+    step: '0.01'
+    stop: '1.5'
+    value: mulEast
+    widget: counter
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [928, 3188.0]
+    rotation: 0
+    state: true
+- name: imulWest
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: Main@3:5,1
+    label: Gain Correction West
+    min_len: '100'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0.1'
+    step: '0.01'
+    stop: '1.5'
+    value: mulWest
+    widget: counter
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 3188.0]
     rotation: 0
     state: true
 - name: irfgain
@@ -341,6 +427,30 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [544, 2988.0]
+    rotation: 0
+    state: true
+- name: phaseEast
+  id: variable
+  parameters:
+    comment: ''
+    value: complex(math.cos(math.radians(iangEast)),math.sin(math.radians(iangEast)))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 292.0]
+    rotation: 0
+    state: true
+- name: phaseWest
+  id: variable
+  parameters:
+    comment: ''
+    value: complex(math.cos(math.radians(iangWest)),math.sin(math.radians(iangWest)))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 364.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -464,7 +574,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1120, 3092.0]
+    coordinate: [1008, 3108.0]
     rotation: 0
     state: true
 - name: winpower
@@ -511,6 +621,40 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [224, 2764.0]
+    rotation: 0
+    state: true
+- name: angleEast
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Phase Corr. Angle EAST
+    short_id: ''
+    type: eng_float
+    value: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 1068.0]
+    rotation: 0
+    state: true
+- name: angleWest
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Phase Corr. Angle WEST
+    short_id: ''
+    type: eng_float
+    value: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 1076.0]
     rotation: 0
     state: true
 - name: antenna
@@ -584,7 +728,7 @@ blocks:
     alias: ''
     collect: True if correct_baseline == False else False
     comment: Optionally apply baseline-subtraction
-    fftsize: '2048'
+    fftsize: fftsize
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
@@ -637,7 +781,7 @@ blocks:
     alias: ''
     collect: True if correct_baseline == False else False
     comment: Optionally apply baseline-subtraction
-    fftsize: '2048'
+    fftsize: fftsize
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
@@ -981,22 +1125,6 @@ blocks:
     coordinate: [1456, 1404.0]
     rotation: 0
     state: true
-- name: blocks_multiply_conjugate_cc_0
-  id: blocks_multiply_conjugate_cc
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [360, 2092.0]
-    rotation: 0
-    state: disabled
 - name: blocks_multiply_conjugate_cc_1
   id: blocks_multiply_conjugate_cc
   parameters:
@@ -1091,7 +1219,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: mulEast
+    const: imulEast*phaseEast
     maxoutbuf: '0'
     minoutbuf: '0'
     type: complex
@@ -1109,7 +1237,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: mulWest
+    const: imulWest*phaseWest
     maxoutbuf: '0'
     minoutbuf: '0'
     type: complex
@@ -1536,32 +1664,42 @@ blocks:
       \ with.\n        #\n        self.set_output_multiple(nchan)\n        \n    \
       \    self.now = time.time()\n        \n        self.longitude = longitude\n\
       \        \n        self.legend = legend\n        \n        self.legcount = 0\n\
-      \n    def work(self, input_items, output_items):\n        \n        if (self.localtime\
-      \ == False):\n            ltp = time.gmtime()\n        else:\n            ltp\
-      \ = time.localtime()\n        \n        #\n        # Distribute the input items\
-      \ over the averaging buffer as appropriate\n        #  We assume that the input\
-      \ is interleaved by 'nchan'\n        #  We use 'self.cndx' to keep track of\
-      \ which channel's averaging\n        #  cell we need to put the next value in.\n\
-      \        #\n        # Because GR's scheduler has no idea what our internal \"\
-      shape\"\n        #  is, it can hand us many, or a few, items, every time we're\n\
-      \        #  called.\n        #\n        for x in range(len(input_items[0])):\n\
+      \        self.fn = \"\"\n        self.curlegend = legend\n\n    def work(self,\
+      \ input_items, output_items):\n        \n        if (self.localtime == False):\n\
+      \            ltp = time.gmtime()\n        else:\n            ltp = time.localtime()\n\
+      \        \n        #\n        # Distribute the input items over the averaging\
+      \ buffer as appropriate\n        #  We assume that the input is interleaved\
+      \ by 'nchan'\n        #  We use 'self.cndx' to keep track of which channel's\
+      \ averaging\n        #  cell we need to put the next value in.\n        #\n\
+      \        # Because GR's scheduler has no idea what our internal \"shape\"\n\
+      \        #  is, it can hand us many, or a few, items, every time we're\n   \
+      \     #  called.\n        #\n        for x in range(len(input_items[0])):\n\
       \            self.avg[self.cndx % self.nchan] += input_items[0][x]\n       \
       \     self.acnt[self.cndx % self.nchan] += 1\n            \n            #\n\
       \            # Increment and modularly reduce cndx\n            #\n        \
       \    self.cndx += 1\n            self.cndx %= self.nchan\n            \n\n \
       \       if ((time.time() - self.now) > self.logtime):\n            self.now\
-      \ = time.time()\n            if (self.formatter == None):\n                fp\
-      \ = open(self.filepat % (ltp.tm_year, ltp.tm_mon, ltp.tm_mday) + self.extension,\
-      \ \"a\")\n                fp.write(\"%02d,%02d,%02d,\" % (ltp.tm_hour, ltp.tm_min,\
-      \ ltp.tm_sec))\n                fp.write(\"%s,\" % ra_funcs.cur_sidereal(self.longitude))\n\
-      \                for x in range(self.nchan):\n                    self.avg[x]\
-      \ /= self.acnt[x]\n                    self.acnt[x] = 1\n                  \
-      \  fp.write (self.fmtstr  % (self.avg[x]))\n                    if (x < self.nchan-1):\n\
-      \                        fp.write(\",\")\n                fp.write(\"\\n\")\n\
-      \                self.legcount += 1\n                if (self.legcount >= 30\
-      \ and self.legend != None):\n                    self.legcount = 0\n       \
-      \             fp.write(\"INFO:%s\\n\" % self.legend)\n                    \n\
-      \                fp.close()\n  \n            else:\n                self.formatter(self.filepat,self.extension,self.avg[0],self.avg[1])\n\
+      \ = time.time()\n            if (self.formatter == None):\n                fn\
+      \ = self.filepat % (ltp.tm_year, ltp.tm_mon, ltp.tm_mday) + self.extension\n\
+      \                fp = open(fn, \"a\")\n                fp.write(\"%02d,%02d,%02d,\"\
+      \ % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))\n                fp.write(\"%s,\"\
+      \ % ra_funcs.cur_sidereal(self.longitude))\n                for x in range(self.nchan):\n\
+      \                    self.avg[x] /= self.acnt[x]\n                    self.acnt[x]\
+      \ = 1\n                    fp.write (self.fmtstr  % (self.avg[x]))\n       \
+      \             if (x < self.nchan-1):\n                        fp.write(\",\"\
+      )\n                fp.write(\"\\n\")\n                self.legcount += 1\n \
+      \               \n                #\n                # Filename has changed\
+      \ (new date) or\n                #  legend has changed (new DEC/FREQ/BW) or\n\
+      \                #  legcount >= 30\n                #\n                wrlegend\
+      \ = False\n                if (self.fn != fn):\n                    self.fn\
+      \ = fn\n                    wrlegend = True\n                elif (self.curlegend\
+      \ != self.legend):\n                    self.curlegend = self.legend\n     \
+      \               wrlegend = True\n                elif (self.legcount >= 30):\n\
+      \                    wrlegend = True\n                    self.legcount = 0\n\
+      \                if (wrlegend == True and self.legend != None):\n          \
+      \          self.legcount = 0\n                    fp.write(\"INFO:%s\\n\" %\
+      \ self.legend)\n                    \n                fp.close()\n  \n     \
+      \       else:\n                self.formatter(self.filepat,self.extension,self.avg[0],self.avg[1])\n\
       \            \n        return len(input_items[0])\n"
     affinity: ''
     alias: ''
@@ -1858,7 +1996,7 @@ blocks:
     alias: ''
     comment: 'We implement a high-pass filter, cheaply
 
-      This allows us to remove any DC offset it
+      This allows us to remove any DC offset in
 
       the correlation.'
     note: ''
@@ -1866,7 +2004,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 2196.0]
+    coordinate: [1048, 2460.0]
     rotation: 0
     state: true
 - name: note_4
@@ -1883,7 +2021,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1984, 1972.0]
+    coordinate: [1624, 1916.0]
     rotation: 0
     state: true
 - name: osmosdr_source_0
@@ -3504,7 +3642,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [-16, 2124.0]
+    coordinate: [32, 2116.0]
     rotation: 0
     state: true
 - name: virtual_source_0_0_0_0
@@ -3517,7 +3655,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [-32, 2204.0]
+    coordinate: [16, 2244.0]
     rotation: 0
     state: true
 - name: virtual_source_0_0_1
@@ -3611,32 +3749,6 @@ blocks:
     coordinate: [1504, 372.0]
     rotation: 0
     state: true
-- name: virtual_source_4
-  id: virtual_source
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: rf1
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [80, 2028.0]
-    rotation: 0
-    state: disabled
-- name: virtual_source_4_0
-  id: virtual_source
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: rf2
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [72, 2140.0]
-    rotation: 0
-    state: disabled
 - name: virtual_source_5
   id: virtual_source
   parameters:
@@ -3746,8 +3858,6 @@ connections:
 - [virtual_source_2_0, '0', blocks_patterned_interleaver_0, '3']
 - [virtual_source_2_0, '0', stripchart_1, '0']
 - [virtual_source_3, '0', blocks_complex_to_float_0, '0']
-- [virtual_source_4, '0', blocks_multiply_conjugate_cc_0, '0']
-- [virtual_source_4_0, '0', blocks_multiply_conjugate_cc_0, '1']
 - [virtual_source_5, '0', blocks_keep_one_in_n_0_2, '0']
 - [virtual_source_5_0, '0', blocks_keep_one_in_n_0_2_0, '0']
 

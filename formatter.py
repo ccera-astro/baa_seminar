@@ -99,6 +99,8 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         self.legend = legend
         
         self.legcount = 0
+        self.fn = ""
+        self.curlegend = legend
 
     def work(self, input_items, output_items):
         
@@ -131,7 +133,8 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         if ((time.time() - self.now) > self.logtime):
             self.now = time.time()
             if (self.formatter == None):
-                fp = open(self.filepat % (ltp.tm_year, ltp.tm_mon, ltp.tm_mday) + self.extension, "a")
+                fn = self.filepat % (ltp.tm_year, ltp.tm_mon, ltp.tm_mday) + self.extension
+                fp = open(fn, "a")
                 fp.write("%02d,%02d,%02d," % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))
                 fp.write("%s," % ra_funcs.cur_sidereal(self.longitude))
                 for x in range(self.nchan):
@@ -142,7 +145,23 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                         fp.write(",")
                 fp.write("\n")
                 self.legcount += 1
-                if (self.legcount >= 30 and self.legend != None):
+                
+                #
+                # Filename has changed (new date) or
+                #  legend has changed (new DEC/FREQ/BW) or
+                #  legcount >= 30
+                #
+                wrlegend = False
+                if (self.fn != fn):
+                    self.fn = fn
+                    wrlegend = True
+                elif (self.curlegend != self.legend):
+                    self.curlegend = self.legend
+                    wrlegend = True
+                elif (self.legcount >= 30):
+                    wrlegend = True
+                    self.legcount = 0
+                if (wrlegend == True and self.legend != None):
                     self.legcount = 0
                     fp.write("INFO:%s\n" % self.legend)
                     
