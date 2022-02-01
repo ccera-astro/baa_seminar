@@ -135,17 +135,6 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
             if (self.formatter == None):
                 fn = self.filepat % (ltp.tm_year, ltp.tm_mon, ltp.tm_mday) + self.extension
                 fp = open(fn, "a")
-                fp.write("%02d,%02d,%02d," % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))
-                fp.write("%s," % ra_funcs.cur_sidereal(self.longitude))
-                for x in range(self.nchan):
-                    self.avg[x] /= self.acnt[x]
-                    self.acnt[x] = 1
-                    fp.write (self.fmtstr  % (self.avg[x]))
-                    if (x < self.nchan-1):
-                        fp.write(",")
-                fp.write("\n")
-                self.legcount += 1
-                
                 #
                 # Filename has changed (new date) or
                 #  legend has changed (new DEC/FREQ/BW) or
@@ -164,6 +153,18 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
                 if (wrlegend == True and self.legend != None):
                     self.legcount = 0
                     fp.write("INFO:%s\n" % self.legend)
+                    
+                fp.write("%02d,%02d,%02d," % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))
+                fp.write("%s," % ra_funcs.cur_sidereal(self.longitude))
+                for x in range(self.nchan):
+                    self.avg[x] /= self.acnt[x]
+                    self.acnt[x] = 1
+                    fp.write (self.fmtstr  % (self.avg[x]))
+                    if (x < self.nchan-1):
+                        fp.write(",")
+                fp.write("\n")
+                self.legcount += 1
+                
                     
                 fp.close()
   
