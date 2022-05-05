@@ -104,7 +104,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: ((samp_rate/2.0)/freq)*299792.0
+    value: ((samp_rate/2.0)/ifreq)*299792.0
   states:
     bus_sink: false
     bus_source: false
@@ -116,7 +116,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: -((samp_rate/2.0)/freq)*299792.0
+    value: -((samp_rate/2.0)/ifreq)*299792.0
   states:
     bus_sink: false
     bus_source: false
@@ -170,7 +170,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: (freq-(samp_rate/2.0))/1.0e6
+    value: (ifreq-(samp_rate/2.0))/1.0e6
   states:
     bus_sink: false
     bus_source: false
