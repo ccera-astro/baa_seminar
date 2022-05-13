@@ -36,7 +36,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: ifreq
+    value: ifreq if is_usrp == False else uhd.tune_request(ifreq, samp_rate/2)
   states:
     bus_sink: false
     bus_source: false
@@ -409,6 +409,18 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1088, 2764.0]
+    rotation: 0
+    state: true
+- name: is_usrp
+  id: variable
+  parameters:
+    comment: ''
+    value: '"uhd" in device'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 508.0]
     rotation: 0
     state: true
 - name: isinteg
@@ -2223,8 +2235,8 @@ blocks:
     bb_gain7: '20'
     bb_gain8: '20'
     bb_gain9: '20'
-    bw0: int((samp_rate*0.8)) if bw == 0 else int(bw)
-    bw1: int((samp_rate*0.8)) if bw == 0 else int( bw)
+    bw0: (int((samp_rate*0.8)) if bw == 0 else int(bw)) if is_usrp == False else (samp_rate*0.8+(samp_rate/1.8))
+    bw1: (int((samp_rate*0.8)) if bw == 0 else int(bw)) if is_usrp == False else (samp_rate*0.8+(samp_rate/1.8))
     bw10: '0'
     bw11: '0'
     bw12: '0'
