@@ -1,6 +1,3 @@
-#
-# This be the last version for GR3.8
-#
 baa_seminar.py:
 	grcc baa_seminar.grc
 
