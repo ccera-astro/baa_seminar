@@ -14,6 +14,8 @@ num_airspy=`lsusb|grep 1d50:60a1 | wc -l`
 if [ $num_rtl -gt 0 ]
 then
 	title="RTL SDR Setup"
+	lowest=24e6
+	highest=1500e6
     speeds="950e3 1e6 2e6 2.5e6 2.56e6"
     gains="10 20 30 40"
     ant="NONE"
@@ -26,11 +28,15 @@ then
 	esac
 elif [ $num_usrp1 -gt 0 ]
 then
+    lowest=1e6
+    highest=4000e6
 	speeds="1e6 2e6 4e6"
 	gains="10 20 30"
 	device="uhd,type=usrp1"
 elif [ $num_b210 -gt 0 ]
 then
+    lowest=50e6
+    highest=6000e6
 	title="USRP B210 Setup"
 	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
 	gains="30 40 50 60 70"
@@ -38,6 +44,8 @@ then
 	ant=RX2
 elif [ $num_b205 -gt 0 ]
 then
+    lowest=50e6
+    highest=6000e6
 	title="USRP B205 Setup"
 	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
 	gains="30 40 50 60 70"
@@ -45,6 +53,8 @@ then
 	ant=RX2
 elif [ $num_lime_usb -gt 0 ]
 then
+    lowest=50e6
+    highest=3800e6
     title="Lime USB Setup"
 	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
 	gains="30 40 50 60 70 80"
@@ -52,6 +62,8 @@ then
 	ant=LNAW
 elif [ $num_lime_mini -gt 0 ]
 then
+    lowest=50e6
+    highest=3800e6
     title="Lime Mini Setup"
 	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
 	gains="30 40 50 60 70 80"
@@ -59,6 +71,8 @@ then
 	ant=LNAW
 elif [ $num_airspy -gt 0 ]
 then
+    lowest=24e6
+    highest=1500e6
     "AirSpy Setup"
 	speeds="2.5e6 10e6"
 	gains="10 20 30 40"
@@ -102,6 +116,12 @@ tfreq=`echo $freq|awk '{printf ("%d\n", $1)}'`
 if [ $tfreq = 0 ]
 then
 	zenity --error --text "\'$freq\' is an invalid value for frequency\nMust be floating-point"
+	exit
+fi
+inrange=`echo $freq|awk -v lowest=$lowest -v highest=$highest '{if ($1 >= lowest && $1 <= highest) {print "TRUE"} else {print "FALSE"}}'`
+if [ $inrange = FALSE ]
+then
+	zenity --error --text "frequency value of \'$freq\' must be within $lowest and $highest"
 	exit
 fi
 if [ $ant != NONE ]
