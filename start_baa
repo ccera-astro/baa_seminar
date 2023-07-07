@@ -32,7 +32,7 @@ then
     highest=4000e6
 	speeds="1e6 2e6 4e6"
 	gains="10 20 30"
-	device="uhd,type=usrp1"
+	device="uhd,type=usrp1,num_recv_frames=256 file=/dev/zero,rate=10e6"
 elif [ $num_b210 -gt 0 ]
 then
     lowest=50e6
@@ -49,7 +49,7 @@ then
 	title="USRP B205 Setup"
 	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
 	gains="30 40 50 60 70"
-	device="uhd,type=b200,num_recv_frames=256"
+	device="uhd,type=b200,num_recv_frames=256 file=/dev/zero,rate=10e6"
 	ant=RX2
 elif [ $num_lime_usb -gt 0 ]
 then
@@ -67,7 +67,7 @@ then
     title="Lime Mini Setup"
 	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
 	gains="30 40 50 60 70 80"
-	device="soapydr,driver=lime"
+	device="soapydr,driver=lime file=/dev/zero,rate=10e6"
 	ant=LNAW
 elif [ $num_airspy -gt 0 ]
 then
