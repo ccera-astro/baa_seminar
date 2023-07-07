@@ -1,4 +1,4 @@
-baa_seminar.py:
+baa_seminar.py: baa_seminar.grc
 	grcc baa_seminar.grc
 
 install:

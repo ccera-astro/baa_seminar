@@ -130,3 +130,8 @@ then
 else
 	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" >$HOME/baa_run_log.txt 2>&1
 fi
+
+if [ $? -ne 0 ]
+then
+	zenity --title "BAA Runtime Error" --text-info --filename $HOME/baa_run_log.txt
+fi
