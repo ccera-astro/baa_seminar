@@ -98,7 +98,12 @@ then
 	zenity --error --text "Missing value for frequency"
 	exit
 fi
-
+tfreq=`echo $freq|awk '{printf ("%d\n", $1)}'`
+if [ $tfreq = 0 ]
+then
+	zenity --error --text "\'$freq\' is an invalid value for frequency\nMust be floating-point"
+	exit
+fi
 if [ $ant != NONE ]
 then
 	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" --antenna "$ant" >$HOME/baa_run_log.txt 2>&1
