@@ -1,0 +1,107 @@
+#!/bin/bash
+
+num_rtl=`lsusb | grep 0bda:283.|wc -l`
+
+num_b210=`lsusb |grep 2500:0020|wc -l`
+num_b205=`lsusb |grep 2500:002'[12]'|wc -l`
+
+num_usrp1=`lsusb |grep 2500:0001|wc -l`
+
+num_lime_usb=`lsusb |grep 1d50:6108|wc -l`
+num_lime_mini=`lsusb|grep 0403:601f|wc -l`
+num_airspy=`lsusb|grep 1d50:60a1 | wc -l`
+
+if [ $num_rtl -gt 0 ]
+then
+	title="RTL SDR Setup"
+    speeds="950e3 1e6 2e6 2.5e6 2.56e6"
+    gains="10 20 30 40"
+    ant="NONE"
+	case $num_rtl in
+		1) 
+		   device="rtl=0 file=/dev/zero,rate=4e6"
+		   ;;
+		2)
+		   device="rtl=0 rtl=1"
+	esac
+elif [ $num_usrp1 -gt 0 ]
+then
+	speeds="1e6 2e6 4e6"
+	gains="10 20 30"
+	device="uhd,type=usrp1"
+elif [ $num_b210 -gt 0 ]
+then
+	title="USRP B210 Setup"
+	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
+	gains="30 40 50 60 70"
+	device="uhd,type=b200,num_recv_frames=256,nchan=2"
+	ant=RX2
+elif [ $num_b205 -gt 0 ]
+then
+	title="USRP B205 Setup"
+	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
+	gains="30 40 50 60 70"
+	device="uhd,type=b200,num_recv_frames=256"
+	ant=RX2
+elif [ $num_lime_usb -gt 0 ]
+then
+    title="Lime USB Setup"
+	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
+	gains="30 40 50 60 70 80"
+	device="soapydr,driver=lime,nchan=2"
+	ant=LNAW
+elif [ $num_lime_mini -gt 0 ]
+then
+    title="Lime Mini Setup"
+	speeds="1.0e6 2.0e6 2.5e6 3.0e6 3.5e6 4.0e6 4.5e6 5.0e6"
+	gains="30 40 50 60 70 80"
+	device="soapydr,driver=lime"
+	ant=LNAW
+elif [ $num_airspy -gt 0 ]
+then
+    "AirSpy Setup"
+	speeds="2.5e6 10e6"
+	gains="10 20 30 40"
+	device="airspy=0"
+	ant="NONE"
+else
+	zenity --error --text "No SDR device found..."
+	exit
+fi
+speeds=`echo $speeds|sed -e 's/ /|/g'`
+gains=`echo $gains|sed -e 's/ /|/g'`
+values=`zenity --title "$title" --forms  --separator "@" --text "Radio Setup" --add-list="Gain" --list-values="$gains" --add-list="Samp. Rate" --list-values="$speeds" --add-entry="Freq."`
+if [ @@ = "@$values@" ]
+then
+	zenity --info --text "Cancelled at user request"
+	exit
+fi
+values=`echo $values|sed -e s/,//g`
+gain=`echo $values|awk -F"@" '{print $1}'`
+speed=`echo $values|awk -F"@" '{print $2}'`
+freq=`echo $values|awk -F"@" '{print $3}'`
+
+if [ @@ = "@$gain@" ]
+then
+	zenity --error --text "Missing value for gain"
+	exit
+fi
+
+if [ @@ = "@$speed@" ]
+then
+	zenity --error --text "Missing value for sample rate"
+	exit
+fi
+
+if [ @@ = "@$freq@" ]
+then
+	zenity --error --text "Missing value for frequency"
+	exit
+fi
+
+if [ $ant != NONE ]
+then
+	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" --antenna "$ant" >$HOME/baa_run_log.txt 2>&1
+else
+	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" >$HOME/baa_run_log.txt 2>&1
+fi
