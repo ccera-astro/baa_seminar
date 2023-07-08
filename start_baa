@@ -1,17 +1,14 @@
 #!/bin/bash
-
-num_rtl=`lsusb | grep 0bda:283.|wc -l`
-
-num_b210=`lsusb |grep 2500:0020|wc -l`
-num_b205=`lsusb |grep 2500:002'[12]'|wc -l`
-
-num_usrp1=`lsusb |grep 2500:0001|wc -l`
-
-num_lime_usb=`lsusb |grep 1d50:6108|wc -l`
-num_lime_mini=`lsusb|grep 0403:601f|wc -l`
-num_airspy=`lsusb|grep 1d50:60a1 | wc -l`
-num_hackrf=`lsusb|grep 1d50:6080 | wc -l`
-
+lsusb >lsusb$$
+num_rtl=`grep 0bda:283. lsusb$$|wc -l`
+num_b210=`grep 2500:0020 lsusb$$|wc -l`
+num_b205=`grep 2500:002'[12]' lsusb$$|wc -l`
+num_usrp1=`grep 2500:0001 lsusb$$|wc -l`
+num_lime_usb=`grep 1d50:6108 lsusb$$|wc -l`
+num_lime_mini=`grep 0403:601f lsusb$$|wc -l`
+num_airspy=`grep 1d50:60a1 lsusb$$| wc -l`
+num_hackrf=`grep 1d50:6080 lsusb$$| wc -l`
+rm -rf lsusb$$
 if [ $num_rtl -gt 0 ]
 then
 	title="RTL SDR Setup"
@@ -29,6 +26,7 @@ then
 	esac
 elif [ $num_usrp1 -gt 0 ]
 then
+    title="USRP1 Setup"
     lowest=1e6
     highest=4000e6
 	speeds="1e6 2e6 4e6"
@@ -110,7 +108,7 @@ else
 fi
 speeds=`echo $speeds|sed -e 's/ /|/g'`
 gains=`echo $gains|sed -e 's/ /|/g'`
-values=`zenity --title "$title" --forms  --separator "@" --text "Radio Setup" --add-list="Gain" --list-values="$gains" --add-list="Samp. Rate" --list-values="$speeds" --add-entry="Freq."`
+values=`zenity --width 300 --title "$title" --forms  --separator "@" --text "$title" --add-list="Gain" --list-values="$gains" --add-list="Samp. Rate" --list-values="$speeds" --add-entry="Freq."`
 if [ @@ = "@$values@" ]
 then
 	zenity --info --text "Cancelled at user request"
