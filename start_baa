@@ -10,6 +10,7 @@ num_usrp1=`lsusb |grep 2500:0001|wc -l`
 num_lime_usb=`lsusb |grep 1d50:6108|wc -l`
 num_lime_mini=`lsusb|grep 0403:601f|wc -l`
 num_airspy=`lsusb|grep 1d50:60a1 | wc -l`
+num_hackrf=`lsusb|grep 1d50:6080 | wc -l`
 
 if [ $num_rtl -gt 0 ]
 then
@@ -95,6 +96,14 @@ then
 	gains="10 20 30 40"
 	device="airspy=0,linearity file=/dev/zero,rate=10e6"
 	ant="NONE"
+elif [ $num_hackrf -gt 0 ]
+then
+	gains="10 20 30 40 50"
+	device="hackrf=0 file=/dev/zero,rate=10e6"
+	ant="NONE"
+	speeds="8e6 10e6"
+	lowest=1e6
+	highest=6e6
 else
 	zenity --error --text "No SDR device found..."
 	exit
