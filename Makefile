@@ -9,6 +9,7 @@ install:
 	mkdir -p /usr/local/share/icons
 	cp satellite-dish-svgrepo-com.svg /usr/local/share/icons
 	chmod 644 /usr/local/share/icons/satellite-dish-svgrepo-com.svg
+	xdg-desktop-menu install ccera-start_baa.desktop
 	
 
 clean:
