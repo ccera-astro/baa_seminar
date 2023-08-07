@@ -30,8 +30,8 @@ then
     lowest=1e6
     highest=4000e6
 	speeds="1e6 2e6 3.2e6 4e6 6.4e6 8e6"
-	gains="10 20 30 40 50 60"
-	device="uhd,type=usrp1,num_recv_frames=256 file=/dev/zero,rate=10e6"
+	gains="10 20 30 40 50 60 70"
+	device="uhd,type=usrp1,num_recv_frames=256,nchan=2,otw_format=sc8,peak=0.1,fpga=usrp1_fpga_4rx.rbf,subdev='A:0 B:0'"
 elif [ $num_b210 -gt 0 ]
 then
     lowest=50e6
