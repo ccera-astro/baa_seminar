@@ -3,7 +3,7 @@ lsusb >lsusb$$
 num_rtl=`grep 0bda:283. lsusb$$|wc -l`
 num_b210=`grep 2500:0020 lsusb$$|wc -l`
 num_b205=`grep 2500:002'[12]' lsusb$$|wc -l`
-num_usrp1=`grep 2500:0001 lsusb$$|wc -l`
+num_usrp1=`grep fffe:0002 lsusb$$|wc -l`
 num_lime_usb=`grep 1d50:6108 lsusb$$|wc -l`
 num_lime_mini=`grep 0403:601f lsusb$$|wc -l`
 num_airspy=`grep 1d50:60a1 lsusb$$| wc -l`
@@ -29,8 +29,8 @@ then
     title="USRP1 Setup"
     lowest=1e6
     highest=4000e6
-	speeds="1e6 2e6 4e6"
-	gains="10 20 30"
+	speeds="1e6 2e6 3.2e6 4e6 6.4e6 8e6"
+	gains="10 20 30 40 50 60"
 	device="uhd,type=usrp1,num_recv_frames=256 file=/dev/zero,rate=10e6"
 elif [ $num_b210 -gt 0 ]
 then
