@@ -9,6 +9,7 @@ num_lime_mini=`grep 0403:601f lsusb$$|wc -l`
 num_airspy=`grep 1d50:60a1 lsusb$$| wc -l`
 num_hackrf=`grep 1d50:6080 lsusb$$| wc -l`
 rm -rf lsusb$$
+ant="NONE"
 if [ $num_rtl -gt 0 ]
 then
 	title="RTL SDR Setup"
@@ -32,6 +33,7 @@ then
 	speeds="1e6 2e6 3.2e6 4e6 6.4e6 8e6"
 	gains="10 20 30 40 50 60 70"
 	device="uhd,type=usrp1,num_recv_frames=256,nchan=2,otw_format=sc8,peak=0.1,fpga=usrp1_fpga_4rx.rbf,subdev='A:0 B:0'"
+	ant="NONE"
 elif [ $num_b210 -gt 0 ]
 then
     lowest=50e6
