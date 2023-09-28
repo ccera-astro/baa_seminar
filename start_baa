@@ -1,4 +1,5 @@
 #!/bin/bash
+sync=""
 lsusb >lsusb$$
 num_rtl=`grep 0bda:283. lsusb$$|wc -l`
 num_b210=`grep 2500:0020 lsusb$$|wc -l`
@@ -52,6 +53,7 @@ then
 	fi
 	rm -f b2xx_setup_txt$$
 	ant=RX2
+	sync="--sync 1"
 elif [ $num_b205 -gt 0 ]
 then
     lowest=50e6
@@ -152,9 +154,9 @@ then
 fi
 if [ $ant != NONE ]
 then
-	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" --antenna "$ant"  >$HOME/baa_run_log.txt 2>&1
+	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" --antenna "$ant"  $sync >$HOME/baa_run_log.txt 2>&1
 else
-	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq"  >$HOME/baa_run_log.txt 2>&1
+	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq"  $sync >$HOME/baa_run_log.txt 2>&1
 fi
 
 if [ $? -ne 0 ]
