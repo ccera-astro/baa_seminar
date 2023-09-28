@@ -2958,6 +2958,21 @@ blocks:
     coordinate: [984, 772.0]
     rotation: 0
     state: true
+- name: snippet_0
+  id: snippet
+  parameters:
+    alias: ''
+    code: "if (self.sync > 0):\n\tself.osmosdr_source_0.set_time_unknown_pps(osmosdr.time_spec_t())"
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 228.0]
+    rotation: 0
+    state: true
 - name: srate
   id: parameter
   parameters:
@@ -3383,6 +3398,23 @@ blocks:
     coordinate: [2240, 548.0]
     rotation: 0
     state: enabled
+- name: sync
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Enable PPS sync
+    short_id: ''
+    type: intx
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 1172.0]
+    rotation: 0
+    state: true
 - name: tinteg
   id: parameter
   parameters:

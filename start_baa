@@ -152,9 +152,9 @@ then
 fi
 if [ $ant != NONE ]
 then
-	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" --antenna "$ant" >$HOME/baa_run_log.txt 2>&1
+	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" --antenna "$ant"  >$HOME/baa_run_log.txt 2>&1
 else
-	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq" >$HOME/baa_run_log.txt 2>&1
+	baa_seminar.py --device "$device" --srate "$speed" --rfgain "$gain" --freq "$freq"  >$HOME/baa_run_log.txt 2>&1
 fi
 
 if [ $? -ne 0 ]
