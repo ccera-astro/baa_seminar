@@ -37,7 +37,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: ifreq
+    value: ifreq if "uhd" not in device else uhd.tune_request(ifreq,samp_rate/2.0)
   states:
     bus_sink: false
     bus_source: false
