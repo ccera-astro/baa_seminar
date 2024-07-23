@@ -37,7 +37,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: ifreq if "uhd" not in device else tunereq
+    value: ifreq
   states:
     bus_sink: false
     bus_source: false
@@ -1604,7 +1604,7 @@ blocks:
     label: Device string
     short_id: ''
     type: str
-    value: '"rtl=0 rtl=1"'
+    value: '"rtl=0 rlt=1"'
   states:
     bus_sink: false
     bus_source: false
