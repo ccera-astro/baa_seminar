@@ -434,8 +434,8 @@ blocks:
     orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '1'
-    step: '10'
-    stop: '1000'
+    step: '30'
+    stop: '3600'
     value: sinteg
     widget: counter
   states:
